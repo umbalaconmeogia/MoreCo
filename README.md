@@ -86,13 +86,14 @@ chmod 777 /home/moreco/web/morecoweb/runtime
 
 #### テスト
 
-* httpdに設定したウェブドメインからアクセスする。
-* 上記の設定では、http://morecoweb.chauhai.com
-* Androidアプリからもアクセスできる。
+* Androidアプリからクエスチョンマーク（？）アイコンを押下して開く。
 
 ## 利用するオープンソースライブラリ一覧
 
-TODO (Thanh)
+|ライブラリ名|用途|配置場所若しくは依存性管理ファイル|URL|
+|---|---|---|---|
+|yii2 framework|ウェブシステムを開発する用PHPフレームワーク|https://github.com/umbalaconmeogia/MoreCo/blob/master/04.Source/morecoweb/composer.json|http://yiiframework.com|
+|TinySegmenter（java移植版）|日本語の文章を分かち書きする||https://github.com/takscape/cmecab-java|
 
 ## Reference
 

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="14dip" />
+
+    <LinearLayout
+        android:id="@+id/searchlayout"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="60dip"
+        android:layout_gravity="center_horizontal|top">
+        <EditText
+            android:layout_width="230dip"
+            android:layout_height="wrap_content"
+            android:id="@+id/edittext"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Search"
+            android:id="@+id/sendbtn"
+            android:textColor="@android:color/black"
+            android:background="@android:color/white"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
+            />
+    </LinearLayout>
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="3dip" />
+
+    <ScrollView
+        android:id="@+id/resultlist"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="80dp"
+        android:layout_gravity="center_horizontal|top" >
+
+        <com.nhaarman.listviewanimations.itemmanipulation.DynamicListView
+            android:id="@android:id/list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:dividerHeight="2dp" />
+    </ScrollView>
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:visibility="invisible"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center" />
+
+</FrameLayout>

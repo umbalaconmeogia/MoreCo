@@ -9,7 +9,7 @@ import android.widget.TextView;
 import service.WearService;
 
 /**
- * Created by PhanVanTrung on 2016/06/28.
+ * Created by PhanVanTrung on 2016/07/02.
  */
 public class UpdateMessageActivity extends WearMainActivity {
     private BoxInsetLayout mContainerView;
@@ -32,6 +32,7 @@ public class UpdateMessageActivity extends WearMainActivity {
         super.onResume();
         Bundle bundle = getIntent().getExtras();
         mTextView.setText(bundle.getString(WearService.EXTRA_KEY_MESSAGE));
+        mTextView.setTextSize(30L);
     }
 
     @Override

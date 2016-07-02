@@ -15,8 +15,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -39,27 +41,33 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 
+import moreco.eas.evolable.asia.moreco.BuildConfig;
 import moreco.eas.evolable.asia.moreco.Constant;
 import moreco.eas.evolable.asia.moreco.R;
+import moreco.eas.evolable.asia.moreco.adapter.SearchListAdapter;
+import moreco.eas.evolable.asia.moreco.database.DictSentenceTranslationDataModel;
 import moreco.eas.evolable.asia.moreco.database.MoreCoRealmDB;
 import moreco.eas.evolable.asia.moreco.searchtext.moreco.searchlib.SearchDataRecord;
 import moreco.eas.evolable.asia.moreco.searchtext.moreco.searchlib.SearchLib;
+import com.nhaarman.listviewanimations.appearance.simple.SwingBottomInAnimationAdapter;
 import moreco.eas.evolable.asia.moreco.util.EditTextUtils;
 import moreco.eas.evolable.asia.moreco.util.GoogleTranslateUtils;
 
 /**
  * Created by PhanVanTrung on 2016/07/02.
  */
-public class SearchFragment extends ListFragment implements GoogleApiClient.ConnectionCallbacks,
+public class SearchFragment extends Fragment implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, TextToSpeech.OnInitListener {
     private GoogleApiClient mGoogleApiClient;
     private MessageApi.MessageListener mMessageListener;
     private DataApi.DataListener mDataListener;
     private EditText mEditText;
     private GoogleTranslateUtils mTranslator;
-    private DynamicListView mSearchListView;
+    private ListView mSearchListView;
     private String mGoogleTranslateResult = "";
     private MoreCoRealmDB mMoreCoRealmDB;
+    private SearchListAdapter mSearchListAdapter;
+    private ArrayList<String> searchResults;
 
     private TextToSpeech mTextToSpeech;
     private int count = 0;
@@ -81,13 +89,6 @@ public class SearchFragment extends ListFragment implements GoogleApiClient.Conn
         }.execute();
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        mSearchListView = (DynamicListView) getListView();
-        setupListViewAndAdapter();
-//        addListeners();
-    }
     /**
      * Setups custom adapter which enables animations when adding elements
      */
@@ -216,6 +217,8 @@ public class SearchFragment extends ListFragment implements GoogleApiClient.Conn
 
         View view = inflater.inflate(R.layout.layout_search_fragment, container, false);
 
+        mSearchListView = (ListView) view.findViewById(R.id.search_list);
+
         int SDK_INT = android.os.Build.VERSION.SDK_INT;
         if (SDK_INT > 9)
         {
@@ -239,18 +242,28 @@ public class SearchFragment extends ListFragment implements GoogleApiClient.Conn
         ((Button) view.findViewById(R.id.sendbtn)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                searchtext();
+                String searchText = "私は部屋の鍵でルームに";
+                List<SearchDataRecord> searchData = createDataTestJapanese();
+                List<SearchDataRecord> searchResult = SearchLib.search(searchText, SearchLib.LANG_CODE_JAPANESE, searchData, 0);
+                searchResults = new ArrayList<String>();
+
+                for (int i = 0; i < searchResult.size(); i++) {
+                    String sentence = searchResult.get(i).getSearchData();
+
+                    searchResults.add(sentence);
+                    if (BuildConfig.DEBUG) Log.d("SearchFragment", "sentence " + i + " : " + sentence);
+                }
+                ArrayAdapter adapter = new ArrayAdapter<String>(getActivity(), R.layout.search_list_layout, searchResults);
+
+//                mSearchListAdapter = new SearchListAdapter(getActivity(), searchResults);
+                mSearchListView.setAdapter(adapter);
+
                 new Translator().execute();
 //                String message = "";
 //                if (mEditText.getText() != null) {
 //                    message = mEditText.getText().toString();
 //                }
 
-//                String  versiondb = mMoreCoRealmDB.getModelfromRealmDB(2).getVersion();
-
-
-////
-//                Toast.makeText(getActivity(), "Downloading  with new Version :" + versiondb , Toast.LENGTH_SHORT).show();
 
                 if (mGoogleApiClient.isConnected()) {
                     new AsyncTask<String, Void, Void>() {
@@ -371,14 +384,14 @@ public class SearchFragment extends ListFragment implements GoogleApiClient.Conn
         Toast.makeText(getActivity(), mGoogleTranslateResult , Toast.LENGTH_LONG).show();
     }
 
-    public void searchtext() {
-        String searchText = "私は部屋の鍵でルームに";
-        List<SearchDataRecord> searchData = createDataTestJapanese();
-        List<SearchDataRecord> searchResult = SearchLib.search(searchText, SearchLib.LANG_CODE_JAPANESE, searchData, 0);
-        for (int i = 0; i < searchResult.size(); i++) {
-            System.out.println(searchResult.get(i).getSearchData());
-        }
-    }
+//    public void searchtext() {
+//        String searchText = "私は部屋の鍵でルームに";
+//        List<SearchDataRecord> searchData = createDataTestJapanese();
+//        List<SearchDataRecord> searchResult = SearchLib.search(searchText, SearchLib.LANG_CODE_JAPANESE, searchData, 0);
+//        for (int i = 0; i < searchResult.size(); i++) {
+//            System.out.println(searchResult.get(i).getSearchData());
+//        }
+//    }
 
     private static List<SearchDataRecord> createDataTestJapanese() {
         String[] testData = {

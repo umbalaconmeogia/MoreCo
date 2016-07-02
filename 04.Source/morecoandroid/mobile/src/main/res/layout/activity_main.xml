@@ -18,23 +18,75 @@
             android:layout_height="?attr/actionBarSize"
             android:background="@android:color/black"
             app:popupTheme="@style/AppTheme.PopupOverlay" />
+
         <android.support.design.widget.TabLayout
             android:id="@+id/tabs"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            app:tabGravity="fill"
+            android:layout_height="70dip"
             android:background="@android:color/darker_gray"
+            app:tabGravity="fill"
             app:tabMode="fixed" />
-        <TextView
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@android:color/black"
-            android:text="Title"
-            android:textSize="20sp"
-            android:textColor="@android:color/white"
-            />
+            android:layout_height="50dip"
+            android:background="@android:color/black">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:text="Search"
+                    android:textColor="@android:color/white"
+                    android:textSize="25sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dip"
+                    android:id="@+id/lang1"
+                    android:src="@drawable/english"
+                    android:layout_centerHorizontal="true"
+                    android:adjustViewBounds="true"
+                    android:cropToPadding="false"
+                    android:background="#00000000"
+                    android:scaleType="fitXY" />
+
+                <TextView
+                    android:layout_width="40dip"
+                    android:layout_height="wrap_content"
+                    android:text="  -  "
+                    android:textSize="20sp"
+                    android:textColor="@android:color/white"/>
+
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dip"
+                    android:id="@+id/lang2"
+                    android:src="@drawable/japan"
+                    android:layout_centerHorizontal="true"
+                    android:adjustViewBounds="true"
+                    android:cropToPadding="false"
+                    android:background="#00000000"
+                    android:scaleType="fitXY" />
+            </LinearLayout>
+        </LinearLayout>
+
 
     </android.support.design.widget.AppBarLayout>
+
     <android.support.v4.view.ViewPager
         android:id="@+id/viewpager"
         android:layout_width="match_parent"

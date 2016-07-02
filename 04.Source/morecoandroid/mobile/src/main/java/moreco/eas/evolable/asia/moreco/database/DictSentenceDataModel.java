@@ -6,24 +6,23 @@ import io.realm.RealmObject;
  * Created by PhanVanTrung on 2016/07/02.
  */
 public class DictSentenceDataModel extends RealmObject {
-    private String version;
-    private int versionId;
+    private int id;
+    private int data_status;
 
-    public int getVersionId() {
-        return versionId;
+
+    public int getSentenceId() {
+        return id;
     }
 
-    public void setVersionId(int versionId) {
-        this.versionId = versionId;
+    public void setSentenceId(int sentenceId) {
+        this.id = sentenceId;
     }
 
-    public String getVersion() {
-        return version;
+    public int getData_status() {
+        return data_status;
     }
 
-    public void setVersion(String version) {
-        this.version = version;
+    public void setData_status(int data_status){
+        this.data_status = data_status;
     }
-
-
 }

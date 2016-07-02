@@ -19,8 +19,16 @@ $config = [
                 [
                     'class' => 'yii\log\FileTarget',
                     'levels' => ['error', 'warning'],
+                    'logVars' => [],
+                    'except' => ['yii\db\*'],
                 ],
-            ],
+                [
+                    'class' => 'yii\log\FileTarget',
+                    'levels' => ['warning'],
+                    'logVars' => [],
+                    'categories' => ['yii\db\*'],
+                    'logFile' => '@app/runtime/logs/sql.log',
+                ],
         ],
         'db' => $db,
     ],

@@ -2,7 +2,7 @@
 id,code,data_status,
 1,en,1,
 2,jp,1,
-3,vn,9,
+3,vn,1,
 *,DictLanguageName,,
 dict_language_id,in_language_id,name,data_status
 1,1,English,1

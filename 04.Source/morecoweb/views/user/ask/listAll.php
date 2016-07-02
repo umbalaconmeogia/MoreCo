@@ -2,10 +2,9 @@
 use yii\data\ActiveDataProvider;
 use yii\widgets\ListView;
 use app\models\Ask;
-use app\models\DictLanguage;
 
 $dataProvider = new ActiveDataProvider([
-    'query' => DictLanguage::find()->with('dictLanguageNames'),
+    'query' => Ask::find(),
 //     'pagination' => [
 //         'pageSize' => 20,
 //     ],

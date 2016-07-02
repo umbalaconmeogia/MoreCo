@@ -10,7 +10,7 @@ class AskController extends Controller
   }
   
   public function actionAsk() {
-    return $this->render('index');
+    return $this->render('ask');
   }
   
   public function actionListAll() {

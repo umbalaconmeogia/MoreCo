@@ -1,0 +1,1 @@
+../../yii import-data/import-from-csv --inputCsv=AskDummyData.csv --truncate=1

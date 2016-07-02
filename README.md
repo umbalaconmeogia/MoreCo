@@ -3,15 +3,26 @@
 ## システム・アプリのインストール／ビルド／テスト方法
 
 ### Androidアプリのビルド／インストール
+・開発環境の必要な条件: Android Studio ver2.0 がおすすめです.
+　最新のAndroid SDK ,Android WearのSDKをダウンロードすることは必要です。
+・下記のプロジェクトをFork and cloneする
 #### Adnroid Wearアプリのビルド／インストール
-
-TODO (Trung)
+・ Android Studioでプロジェクトを開いてビルドモードを「wear」を選択する
+・ Android Wearの設定を選択し、「開発者向けオプション」を設定する
+・ Android Studioで「ビルド」を選択して Android Wearでアプリケージョンが起動する
 
 #### Android Phoneアプリのビルド／インストール
-
-TODO (Trung)
+・ Android Studioでプロジェクトを開いてビルドモードを「mobile」を選択する
+・ Android 端末の設定を選択し、「開発者向けオプション」を設定する
+・ Android Studioで「ビルド」を選択して Android端末でアプリケージョンが起動する
 
 #### Androidアプリのテスト方法
+・ Android端末で「Android Wear」というアプリをGoogle PlayからダウンロードしてAndroid端末とAndroid Wear の
+ペリングを設定する
+・　Android　端末でアプリを起動して母国語と通訳語を簡単に設定する
+・　テスト入力枠に簡単な母国語の単語を入力して質問文を検索する。
+・　質問文を選択してから、アプリが自動的に通訳し、通知した質問文をAndroid Wearアプリに送って相手に見せる、
+同時にAndroid端末で通訳語で質問文を読み上げる。
 
 ### Webシステム
 

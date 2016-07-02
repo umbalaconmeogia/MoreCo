@@ -4,6 +4,7 @@
  */
 use yii\data\ActiveDataProvider;
 use yii\widgets\ListView;
+use app\components\BaseController;
 
 $dataProvider = new ActiveDataProvider([
     'query' => $query,

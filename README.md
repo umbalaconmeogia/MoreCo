@@ -6,13 +6,13 @@
 * 開発環境の必要な条件: Android Studio ver2.0 がおすすめです.  
   最新のAndroid SDK ,Android WearのSDKをダウンロードすることは必要です。 
 * 下記のプロジェクトをFork and cloneする
+https://github.com/umbalaconmeogia/MoreCo/tree/master/04.Source/morecoandroid
 
 #### Adnroid Wearアプリのビルド／インストール  
 
 * Android Studioでプロジェクトを開いてビルドモードを「wear」を選択する
 * Android Wearの設定を選択し、「開発者向けオプション」を設定する
 * Android Studioで「ビルド」を選択して Android Wearでアプリケージョンが起動する
-
 
 #### Android Phoneアプリのビルド／インストール
 

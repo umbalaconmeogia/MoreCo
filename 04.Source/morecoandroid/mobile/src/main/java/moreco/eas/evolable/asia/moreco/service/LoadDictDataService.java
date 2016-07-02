@@ -138,12 +138,6 @@ public class LoadDictDataService extends IntentService {
 //
 //                String dictversion = mGlobalConfig.getKeyDictVersion();
 //                int versionId = mGlobalConfig.getKeyDictVersionId();
-
-            String versiondb = mMoreCoRealmDB.queryAllRealmDB().get(0).getVersion();
-//
-            Toast.makeText(LoadDictDataService.this, "Downloading  with new Version :" + versiondb , Toast.LENGTH_SHORT).show();
-
-
         }
 
 

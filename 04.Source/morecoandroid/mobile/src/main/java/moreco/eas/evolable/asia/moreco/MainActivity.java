@@ -1,7 +1,6 @@
 package moreco.eas.evolable.asia.moreco;
 
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -11,7 +10,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,18 +18,11 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-import java.util.ArrayList;
-
 import moreco.eas.evolable.asia.moreco.adapter.ViewPageAdapter;
-import moreco.eas.evolable.asia.moreco.database.DictLanguagesDataModel;
 import moreco.eas.evolable.asia.moreco.database.MoreCoRealmDB;
 import moreco.eas.evolable.asia.moreco.fragment.AskFragment;
-import moreco.eas.evolable.asia.moreco.fragment.HistoryFragment;
-import moreco.eas.evolable.asia.moreco.fragment.MostUseFragment;
 import moreco.eas.evolable.asia.moreco.fragment.SearchFragment;
-import moreco.eas.evolable.asia.moreco.fragment.SettingFragment;
 import moreco.eas.evolable.asia.moreco.preferences.GlobalConfig;
-import moreco.eas.evolable.asia.moreco.service.LoadDictDataService;
 import moreco.eas.evolable.asia.moreco.util.DictionaryDataUtils;
 
 public class MainActivity extends AppCompatActivity {

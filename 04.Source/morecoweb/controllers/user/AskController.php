@@ -4,6 +4,7 @@ namespace app\controllers\user;
 use app\models\Ask;
 use Yii;
 use app\components\BaseController;
+use app\components\Y;
 
 class AskController extends BaseController
 {
@@ -29,11 +30,11 @@ class AskController extends BaseController
 
   public function actionListMyAsks() {
     $query = Ask::find()->orderBy('update_time DESC, create_time DESC')->where(['ask_user_id' => $this->getUserId()]);
-    return $this->render('listAll', ['query' => $query]);
+    return $this->render('listAll', ['query' => $query, 'pageHeader' => Y::t('list_my_asks')]);
   }
   
   public function actionListAll() {
     $query = Ask::find()->orderBy('update_time DESC, create_time DESC');
-    return $this->render('listAll', ['query' => $query]);
+    return $this->render('listAll', ['query' => $query, 'pageHeader' => Y::t('list_all_asks')]);
   }
 }

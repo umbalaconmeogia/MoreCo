@@ -28,7 +28,7 @@ AppAsset::register($this);
 <div class="wrap">
     <?php
     NavBar::begin([
-        'brandLabel' => Y::t('Top'),
+        'brandLabel' => Y::t('list_all_asks'),
         'brandUrl' => ['user/ask/list-all'],
         'options' => [
             'class' => 'navbar-inverse navbar-fixed-top',
@@ -37,8 +37,8 @@ AppAsset::register($this);
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => [
-            ['label' => Y::t('Ask'), 'url' => ['user/ask/new']],
-            ['label' => Y::t('My questions'), 'url' => ['user/ask/list-my-asks']],
+            ['label' => Y::t('post_question'), 'url' => ['user/ask/new']],
+            ['label' => Y::t('list_my_asks'), 'url' => ['user/ask/list-my-asks']],
             ['label' => Y::t('Admin'), 'url' => ['admin/ask/list']],
             /*
             ['label' => 'Home', 'url' => ['/site/index']],

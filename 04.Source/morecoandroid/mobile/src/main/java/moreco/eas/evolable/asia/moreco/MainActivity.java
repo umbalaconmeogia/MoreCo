@@ -10,7 +10,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.widget.Toast;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+
+import java.util.ArrayList;
 
 import moreco.eas.evolable.asia.moreco.adapter.ViewPageAdapter;
 import moreco.eas.evolable.asia.moreco.fragment.AskFragment;
@@ -18,12 +21,15 @@ import moreco.eas.evolable.asia.moreco.fragment.HistoryFragment;
 import moreco.eas.evolable.asia.moreco.fragment.MostUseFragment;
 import moreco.eas.evolable.asia.moreco.fragment.SearchFragment;
 import moreco.eas.evolable.asia.moreco.fragment.SettingFragment;
+import moreco.eas.evolable.asia.moreco.preferences.GlobalConfig;
 import moreco.eas.evolable.asia.moreco.util.DictionaryDataUtils;
 
 public class MainActivity extends AppCompatActivity {
     private ViewPager mViewPager;
     private TabLayout mTabLayout;
     private DictionaryDataUtils mDictDataUtils;
+
+    private GlobalConfig mGlobalConfig;
 
     private int[] tabIcons = {
             R.drawable.find,
@@ -33,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
             R.drawable.setting,
     };
 
-    private class DictVesion extends AsyncTask<Void, Void, Void> {
+    private class LoadDictVesion extends AsyncTask<Void, Void, Void> {
         private ProgressDialog progress = null;
 
         protected void onError(Exception ex) {
@@ -42,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... params) {
             mDictDataUtils = new DictionaryDataUtils();
+            mGlobalConfig = new GlobalConfig(MainActivity.this);
             return null;
         }
 
@@ -54,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             //start the progress dialog
-            progress = ProgressDialog.show(MainActivity.this , null, "Confirm new dictionary version...");
+            progress = ProgressDialog.show(MainActivity.this, null, "Confirm new dictionary version...");
             progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             progress.setIndeterminate(true);
             super.onPreExecute();
@@ -68,9 +75,68 @@ public class MainActivity extends AppCompatActivity {
             JsonObject jsonObject = mDictDataUtils.requestDictionaryJsonObject(DictionaryDataUtils.REQUEST_DICTIONARY_VERSION_URL);
             String version = jsonObject.get("version").getAsString();
             int id = jsonObject.get("id").getAsInt();
-            Toast.makeText(MainActivity.this, "Version" + version + "id :" + id, Toast.LENGTH_SHORT).show();
+
+            String dictversion = mGlobalConfig.getKeyDictVersion();
+            int versionId = mGlobalConfig.getKeyDictVersionId();
+
+            if (dictversion.equals(version) && id == versionId) {
+                Toast.makeText(MainActivity.this, "Version" + version + "id :" + id, Toast.LENGTH_SHORT).show();
+            } else {
+                mGlobalConfig.setKeyDictVersion(version);
+                mGlobalConfig.setKeyDictVersionId(id);
+                new LoadDictData().execute();
+//                Toast.makeText(MainActivity.this, "Downloading new Version :" + version + "   id : " + id, Toast.LENGTH_SHORT).show();
+            }
 
         }
+
+    }
+    private class LoadDictData extends AsyncTask<Void, Void, Void> {
+            private ProgressDialog progress = null;
+
+            protected void onError(Exception ex) {
+            }
+
+            @Override
+            protected Void doInBackground(Void... params) {
+                mDictDataUtils = new DictionaryDataUtils();
+                mGlobalConfig = new GlobalConfig(MainActivity.this);
+                return null;
+            }
+
+
+            @Override
+            protected void onCancelled() {
+                super.onCancelled();
+            }
+
+            @Override
+            protected void onPreExecute() {
+                //start the progress dialog
+                progress = ProgressDialog.show(MainActivity.this , null, "Downloading the new dictionary data...");
+                progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                progress.setIndeterminate(true);
+                super.onPreExecute();
+            }
+
+            @Override
+
+            protected void onPostExecute(Void result) {
+                progress.dismiss();
+                super.onPostExecute(result);
+                JsonObject jsonObject = mDictDataUtils.requestDictionaryJsonObject(DictionaryDataUtils.REQUEST_DICTIONARY_DATA_URL);
+                String version = jsonObject.getAsJsonObject("DictVersion").get("version").getAsString();
+//                JsonArray jsonArray = jsonObject.getAsJsonObject("DictLanguages").getAsJsonArray();
+//                int id = jsonObject.get("id").getAsInt();
+//
+//                String dictversion = mGlobalConfig.getKeyDictVersion();
+//                int versionId = mGlobalConfig.getKeyDictVersionId();
+//
+                    Toast.makeText(MainActivity.this, "Downloading  with new Version :" + version , Toast.LENGTH_SHORT).show();
+
+
+            }
+
 
         @Override
         protected void onProgressUpdate(Void... values) {
@@ -94,7 +160,7 @@ public class MainActivity extends AppCompatActivity {
 
         setupTabIcons();
 
-        new DictVesion().execute();
+        new LoadDictVesion().execute();
     }
 
     @Override

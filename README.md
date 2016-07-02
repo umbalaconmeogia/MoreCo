@@ -70,9 +70,9 @@ chmod 777 /home/moreco/web/morecoweb/runtime
 
 #### テスト
 
-httpdに設定したウェブドメインからアクセスする。
-上記の設定では、http://morecoweb.chauhai.com
-Androidアプリからもアクセスできる。
+* httpdに設定したウェブドメインからアクセスする。
+* 上記の設定では、http://morecoweb.chauhai.com
+* Androidアプリからもアクセスできる。
 
 ## 利用するオープンソースライブラリ一覧
 

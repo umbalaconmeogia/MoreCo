@@ -29,6 +29,7 @@ $config = [
                     'categories' => ['yii\db\*'],
                     'logFile' => '@app/runtime/logs/sql.log',
                 ],
+             ],
         ],
         'db' => $db,
     ],

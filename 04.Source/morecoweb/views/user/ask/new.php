@@ -18,7 +18,7 @@ use app\models\DictLanguage;
 $selectLanguageHtml = Html::activeDropDownList(
     $ask, 'to_language_id', DictLanguage::getAllDictLanguageIdNameArray($ask->from_language_id));
 $howToSayHtml = $form->field($ask, 'ask_content')->textInput()->label(false);
-echo Y::t('How to say {askContent} in {selectLanguage} ', [
+echo Y::t('how_to_say_in_language', [
     'askContent' => $howToSayHtml,
     'selectLanguage' => $selectLanguageHtml,
 ]);

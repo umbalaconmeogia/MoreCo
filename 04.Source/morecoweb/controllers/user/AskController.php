@@ -9,22 +9,28 @@ use app\models\DictLanguage;
 
 class AskController extends Controller
 {
+  const SESSION_KEY_USER_LOGIN_ID = 'userLoginId';
+  const SESSION_KEY_USER_LANGUAGE_ID = 'userLanguageId';
+  const SESSION_KEY_USER_LANGUAGE_CODE = 'userLanguageCode';
+  
   /**
    * Check if user specified.
    * {@inheritDoc}
    * @see \yii\web\Controller::beforeAction()
    */
-  public function beforeAction($event)
+  public function init()
   {
+    parent::init();
     $this->checkUserEmail();
     $this->checkUserLanguage();
-
-    return parent::beforeAction($event);
+    echo "Langugage " .  Yii::$app->language;
+    
+//     return parent::beforeAction($event);
   }
   
   public function actionNew() {
     $ask = new Ask();
-    $ask->from_language_id = \Yii::$app->request->get('from_language_id', 1);
+    $ask->from_language_id = \Yii::$app->request->get('from_language_id', $this->getUserLaguageId());
     return $this->render('new', ['ask' => $ask]);
   }
   
@@ -60,13 +66,17 @@ class AskController extends Controller
       $dictLanguage = DictLanguage::find()->where(['code' => $userLanguageCode])->one();
       if ($dictLanguage) {
         // Save into session.
-        Yii::$app->session['userLanguageId'] = $dictLanguage->id;
+        Yii::$app->session[self::SESSION_KEY_USER_LANGUAGE_ID] = $dictLanguage->id;
+        Yii::$app->session[self::SESSION_KEY_USER_LANGUAGE_CODE] = $dictLanguage->code;
       }
     }
     // Check user language id.
-    if (!isset(Yii::$app->session['userLanguageId'])) {
-      Yii::$app->session['userLanguageId'] = 1;
+    if (!isset(Yii::$app->session[self::SESSION_KEY_USER_LANGUAGE_ID])) {
+      Yii::$app->session[self::SESSION_KEY_USER_LANGUAGE_ID] = 1;
+      Yii::$app->session[self::SESSION_KEY_USER_LANGUAGE_CODE] = 'en';
     }
+    // Set system language.
+    Yii::$app->language = Yii::$app->session[self::SESSION_KEY_USER_LANGUAGE_CODE]; 
   }
   
   /**
@@ -89,12 +99,16 @@ class AskController extends Controller
         }
       }
       // Save into session.
-      Yii::$app->session['userLoginId'] = $appUser->id;
+      Yii::$app->session[self::SESSION_KEY_USER_LOGIN_ID] = $appUser->id;
     }
     
     // Check user id.
-    if (!isset(Yii::$app->session['userLoginId'])) {
+    if (!isset(Yii::$app->session[self::SESSION_KEY_USER_LOGIN_ID])) {
       throw new \Exception("You are not login");
     }
+  }
+  
+  private function getUserLaguageId() {
+    return Yii::$app->session[self::SESSION_KEY_USER_LOGIN_ID];
   }
 }

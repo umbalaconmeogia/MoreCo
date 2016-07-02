@@ -62,6 +62,16 @@ public class MoreCoRealmDB {
     }
 
 
+    //DictSentence DB
+    public void writetoDictSentenceDB(int id,int dataStatus) {
+        mRealm.beginTransaction();
+        // Create a new object
+        DictSentenceDataModel dictSentence  = mRealm.createObject(DictSentenceDataModel.class);
+        dictSentence.setSentenceId(id);
+        dictSentence.setData_status(dataStatus);
+        mRealm.commitTransaction();
+    }
+
     //DictSentenceTranslation DB
     public void writetoDictSentenceTranslationDB(int id, int dictLangId, int dicSenId, String translatedsentence,String searchtext, int dataStatus) {
         mRealm.beginTransaction();
@@ -82,13 +92,13 @@ public class MoreCoRealmDB {
         return resultAll;
     }
 
-    public DictVersionDataModel getModelfromRealmDB(int versionId) {
-        RealmQuery<DictVersionDataModel> query = mRealm.where(DictVersionDataModel.class);
-        query.equalTo("versionId", versionId);
-        RealmResults<DictVersionDataModel> result = query.findAll();
-        if (result == null) {
-            return null;
-        }
-        return result.get(1);
-    }
+//    public DictVersionDataModel getModelfromRealmDB(int versionId) {
+//        RealmQuery<DictVersionDataModel> query = mRealm.where(DictVersionDataModel.class);
+//        query.equalTo("versionId", versionId);
+//        RealmResults<DictVersionDataModel> result = query.findAll();
+//        if (result == null) {
+//            return null;
+//        }
+//        return result.get(1);
+//    }
 }

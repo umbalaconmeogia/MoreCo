@@ -13,6 +13,9 @@ public class DictSentenceTranslationDataModel extends RealmObject {
     private String searching_text;
     private int data_status;
 
+    public DictSentenceTranslationDataModel() {
+    }
+
     public int getId() {
         return id;
     }

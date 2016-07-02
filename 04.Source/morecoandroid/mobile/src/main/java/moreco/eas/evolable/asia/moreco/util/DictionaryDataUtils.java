@@ -19,7 +19,7 @@ import java.net.URL;
 public class DictionaryDataUtils {
 
     public static final String REQUEST_DICTIONARY_VERSION_URL = "http://morecoweb.chauhai.com//index.php?r=dict-api/version";
-    public static final String REQUEST_DICTIONARY_DATA_URL = "http://morecoweb.chauhai.com//index.php?r=dict-api/data";
+    public static final String REQUEST_DICTIONARY_DATA_URL = "http://morecoweb.chauhai.com//index.php?r=dict-api/data&maxDictSentenceNumber=10";
 
     public DictionaryDataUtils() {
     }

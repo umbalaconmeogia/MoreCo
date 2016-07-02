@@ -8,6 +8,10 @@ import android.support.wearable.view.BoxInsetLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+/**
+ * Created by PhanVanTrung on 2016/07/02.
+ */
+
 public class WearMainActivity extends WearableActivity {
 
     private BoxInsetLayout mContainerView;
@@ -18,7 +22,7 @@ public class WearMainActivity extends WearableActivity {
         super.onCreate(savedInstanceState);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         setContentView(R.layout.activity_wear_main);
-        setAmbientEnabled();
+//        setAmbientEnabled();
 
         mContainerView = (BoxInsetLayout) findViewById(R.id.container);
         mTextView = (TextView) findViewById(R.id.maintext);
@@ -35,31 +39,31 @@ public class WearMainActivity extends WearableActivity {
         super.onResume();
     }
 
-    @Override
-    public void onEnterAmbient(Bundle ambientDetails) {
-        super.onEnterAmbient(ambientDetails);
-        updateDisplay();
-    }
-
-    @Override
-    public void onUpdateAmbient() {
-        super.onUpdateAmbient();
-        updateDisplay();
-    }
-
-    @Override
-    public void onExitAmbient() {
-        updateDisplay();
-        super.onExitAmbient();
-    }
-
-    private void updateDisplay() {
-        if (isAmbient()) {
-            mContainerView.setBackgroundColor(getResources().getColor(android.R.color.black));
-            mTextView.setTextColor(getResources().getColor(android.R.color.holo_red_light));
-        } else {
-            mContainerView.setBackground(null);
-            mTextView.setTextColor(getResources().getColor(android.R.color.black));
-        }
-    }
+//    @Override
+//    public void onEnterAmbient(Bundle ambientDetails) {
+//        super.onEnterAmbient(ambientDetails);
+//        updateDisplay();
+//    }
+//
+//    @Override
+//    public void onUpdateAmbient() {
+//        super.onUpdateAmbient();
+//        updateDisplay();
+//    }
+//
+//    @Override
+//    public void onExitAmbient() {
+//        updateDisplay();
+//        super.onExitAmbient();
+//    }
+//
+//    private void updateDisplay() {
+//        if (isAmbient()) {
+//            mContainerView.setBackgroundColor(getResources().getColor(android.R.color.black));
+//            mTextView.setTextColor(getResources().getColor(android.R.color.holo_red_light));
+//        } else {
+//            mContainerView.setBackground(null);
+//            mTextView.setTextColor(getResources().getColor(android.R.color.black));
+//        }
+//    }
 }

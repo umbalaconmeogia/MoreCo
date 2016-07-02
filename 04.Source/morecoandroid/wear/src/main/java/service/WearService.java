@@ -13,7 +13,7 @@ import com.google.android.gms.wearable.WearableListenerService;
 import moreco.eas.evolable.asia.moreco.UpdateMessageActivity;
 
 /**
- * Created by Phan Van Trung on 2016/06/26.
+ * Created by PhanVanTrung on 2016/07/02.
  */
 public class WearService extends WearableListenerService {
 

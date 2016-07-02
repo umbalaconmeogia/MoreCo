@@ -93,7 +93,7 @@ chmod 777 /home/moreco/web/morecoweb/runtime
 |ライブラリ名|用途|配置場所若しくは依存性管理ファイル|URL|
 |---|---|---|---|
 |yii2 framework|ウェブシステムを開発する用PHPフレームワーク|https://github.com/umbalaconmeogia/MoreCo/blob/master/04.Source/morecoweb/composer.json|http://yiiframework.com|
-|TinySegmenter（java移植版）|日本語の文章を分かち書きする||https://github.com/takscape/cmecab-java|
+|TinySegmenter（java移植版）|日本語の文章を分かち書きする|https://github.com/umbalaconmeogia/MoreCo/tree/master/04.Source/morecoandroid/mobile/src/main/java/moreco/eas/evolable/asia/moreco/searchtext/net/moraleboost|https://github.com/takscape/cmecab-java|
 
 ## Reference
 

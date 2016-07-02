@@ -11,6 +11,7 @@ return array (
   'list_all_asks' => '全質問一覧',
   'list_my_asks' => '自分の質問一覧',
   'post_question' => '質問投稿',
+  'reply' => '回答',
   'submit' => '投稿',
 );
 ?>

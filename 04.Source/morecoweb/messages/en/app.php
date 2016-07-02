@@ -11,6 +11,7 @@ return array (
   'list_all_asks' => 'List all questions',
   'list_my_asks' => 'List my questions',
   'post_question' => 'Post a question',
+  'reply' => 'Reply',
   'submit' => 'Submit',
 );
 ?>

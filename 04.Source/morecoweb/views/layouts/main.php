@@ -37,7 +37,7 @@ AppAsset::register($this);
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => [
-            ['label' => Y::t('Ask'), 'url' => ['user/ask/ask']],
+            ['label' => Y::t('Ask'), 'url' => ['user/ask/new']],
             ['label' => Y::t('My questions'), 'url' => ['user/ask/list-my-asks']],
             ['label' => Y::t('Admin'), 'url' => ['admin/ask/list']],
             /*

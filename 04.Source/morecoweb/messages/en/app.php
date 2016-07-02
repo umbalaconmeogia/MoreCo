@@ -6,6 +6,6 @@
  * When add new message to a language, synchronize it in all other languages.
  */
 return array (
-  'how_to_say_in_language' => 'How to say {askContent} in {selectLanguage}',
+  'how_to_say_in_language' => 'How to say in {selectLanguage} ?',
 );
 ?>

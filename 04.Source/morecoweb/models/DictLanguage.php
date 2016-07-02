@@ -53,4 +53,9 @@ class DictLanguage extends BaseBatsgModel
             'update_user_id' => 'Update User ID',
         ];
     }
+    
+    public function getDictLanguageNames()
+    {
+      return $this->hasMany(DictLanguageName::className(), ['dict_language_id' => 'id']);
+    }
 }

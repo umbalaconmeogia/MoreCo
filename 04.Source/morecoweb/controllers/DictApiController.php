@@ -14,7 +14,7 @@ class DictApiController extends Controller
 {
     public function actionVersion()
     {
-        $dictVersion = DictVersion::find()->orderBy(['id' => SORT_DESC])->select(['version'])->one();
+        $dictVersion = DictVersion::find()->orderBy(['id' => SORT_DESC])->select(['id', 'version'])->one();
         \Yii::$app->response->format = 'json';
         return $dictVersion;
     }

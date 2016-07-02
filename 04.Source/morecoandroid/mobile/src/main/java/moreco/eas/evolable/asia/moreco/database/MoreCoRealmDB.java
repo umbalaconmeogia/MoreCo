@@ -86,9 +86,9 @@ public class MoreCoRealmDB {
         mRealm.commitTransaction();
     }
 
-    public RealmResults<DictVersionDataModel> queryAllRealmDB() {
-        RealmQuery<DictVersionDataModel> query = mRealm.where(DictVersionDataModel.class);
-        RealmResults<DictVersionDataModel> resultAll = query.findAll();
+    public RealmResults<DictSentenceTranslationDataModel> queryAllRealmDB() {
+        RealmQuery<DictSentenceTranslationDataModel> query = mRealm.where(DictSentenceTranslationDataModel.class);
+        RealmResults<DictSentenceTranslationDataModel> resultAll = query.findAll();
         return resultAll;
     }
 

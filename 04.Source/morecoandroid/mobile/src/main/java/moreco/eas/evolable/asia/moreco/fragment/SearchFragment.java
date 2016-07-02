@@ -41,6 +41,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 
+import io.realm.RealmResults;
 import moreco.eas.evolable.asia.moreco.BuildConfig;
 import moreco.eas.evolable.asia.moreco.Constant;
 import moreco.eas.evolable.asia.moreco.R;
@@ -243,7 +244,7 @@ public class SearchFragment extends Fragment implements GoogleApiClient.Connecti
             @Override
             public void onClick(View view) {
                 String searchText = "私は部屋の鍵でルームに";
-                List<SearchDataRecord> searchData = createDataTestJapanese();
+                List<SearchDataRecord> searchData = createDataJapanese();
                 List<SearchDataRecord> searchResult = SearchLib.search(searchText, SearchLib.LANG_CODE_JAPANESE, searchData, 0);
                 searchResults = new ArrayList<String>();
 
@@ -302,7 +303,7 @@ public class SearchFragment extends Fragment implements GoogleApiClient.Connecti
 
         if (status == TextToSpeech.SUCCESS) {
 
-            int result = mTextToSpeech.setLanguage(Locale.US);
+            int result = mTextToSpeech.setLanguage(Locale.JAPANESE);
 
             if (result == TextToSpeech.LANG_MISSING_DATA
                     || result == TextToSpeech.LANG_NOT_SUPPORTED) {
@@ -320,7 +321,7 @@ public class SearchFragment extends Fragment implements GoogleApiClient.Connecti
     private void speakOut() {
         String text = mEditText.getText().toString();
         if (!TextUtils.isEmpty(text))
-            mTextToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, null);
+            mTextToSpeech.speak(mGoogleTranslateResult, TextToSpeech.QUEUE_FLUSH, null);
     }
 
 
@@ -393,40 +394,54 @@ public class SearchFragment extends Fragment implements GoogleApiClient.Connecti
 //        }
 //    }
 
-    private static List<SearchDataRecord> createDataTestJapanese() {
-        String[] testData = {
-                "チェックインをお願いします。名前は{0}です。",
-                "これが予約確認書です。",
-                "予約してません。空いている部屋はありますか？",
-                "シングル１部屋で、２泊です。",
-                "ダブルルーム１部屋で１泊です。",
-                "ツインルーム１部屋で３泊です。",
-                "バスルーム/シャワーつきの部屋ですか？",
-                "ご予約頂いている{0}様ですね。",
-                "空いている部屋はございます。どうぞ、お泊まり下さい。",
-                "あいにく、空いている部屋はございません。",
-                "こちらのフォームにご記入下さい。",
-                "お支払はクレジットカードですか？",
-                "では、クレジットカードをお願い致します。",
-                "有難うございました。（カードを返す。）",
-                "料金は前払いとなっております。{0}ドルをお願い致します。",
-                "有難うございました。こちらが領収書です。",
-                "お部屋の番号は{0}になります。こちらが鍵です。",
-                "お部屋は２階です。",
-                "お部屋は３階です。",
-                "今、係りの者がお部屋までご案内いたします。",
-                "外出の際は、鍵をフロントにお預け下さい。",
-                "朝食はカフェテリアでお取り頂けます。",
-                "朝食は料金に含まれています。",
-                "カフェテリアは１階、あちらにございます。 (方向を手で示しながら。）",
-        };
-        return createDataTest(testData);
+    private List<SearchDataRecord> createDataJapanese() {
+        List<String> list = new ArrayList<>();
+        RealmResults<DictSentenceTranslationDataModel> dictsen = mMoreCoRealmDB.queryAllRealmDB();
+        for(DictSentenceTranslationDataModel model: dictsen){
+            String sentence = model.getTranslated_sentence();
+            list.add(sentence);
+        }
+
+        return createDataTest(list);
     }
 
-    private static List<SearchDataRecord> createDataTest(String[] testData) {
+//    private static  List<SearchDataRecord> createDataEnglish() {
+//    }
+
+//    private static List<SearchDataRecord> createDataTestJapanese() {
+//        String[] testData = {
+//                "チェックインをお願いします。名前は{0}です。",
+//                "これが予約確認書です。",
+//                "予約してません。空いている部屋はありますか？",
+//                "シングル１部屋で、２泊です。",
+//                "ダブルルーム１部屋で１泊です。",
+//                "ツインルーム１部屋で３泊です。",
+//                "バスルーム/シャワーつきの部屋ですか？",
+//                "ご予約頂いている{0}様ですね。",
+//                "空いている部屋はございます。どうぞ、お泊まり下さい。",
+//                "あいにく、空いている部屋はございません。",
+//                "こちらのフォームにご記入下さい。",
+//                "お支払はクレジットカードですか？",
+//                "では、クレジットカードをお願い致します。",
+//                "有難うございました。（カードを返す。）",
+//                "料金は前払いとなっております。{0}ドルをお願い致します。",
+//                "有難うございました。こちらが領収書です。",
+//                "お部屋の番号は{0}になります。こちらが鍵です。",
+//                "お部屋は２階です。",
+//                "お部屋は３階です。",
+//                "今、係りの者がお部屋までご案内いたします。",
+//                "外出の際は、鍵をフロントにお預け下さい。",
+//                "朝食はカフェテリアでお取り頂けます。",
+//                "朝食は料金に含まれています。",
+//                "カフェテリアは１階、あちらにございます。 (方向を手で示しながら。）",
+//        };
+//        return createDataTest(testData);
+//    }
+
+    private static List<SearchDataRecord> createDataTest(List<String> testData) {
         List<SearchDataRecord> result = new ArrayList<SearchDataRecord>();
-        for (int i = 0; i < testData.length; i++) {
-            result.add(new TestSearchData(testData[i]));
+        for (int i = 0; i < testData.size(); i++) {
+            result.add(new TestSearchData(testData.get(i)));
         }
 
         return result;

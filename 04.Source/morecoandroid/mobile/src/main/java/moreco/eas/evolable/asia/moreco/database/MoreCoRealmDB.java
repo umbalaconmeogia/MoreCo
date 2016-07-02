@@ -27,26 +27,78 @@ public class MoreCoRealmDB {
         mRealm = Realm.getInstance(realmConfig);
     }
 
-    public void writetoRealmDB(String version, int versionId) {
+    //DictVersion DB
+    public void writetoDictVersionDB(String version, int versionId) {
         mRealm.beginTransaction();
         // Create a new object
-        DictDataModel dictDataModel = mRealm.createObject(DictDataModel.class);
+        DictVersionDataModel dictDataModel = mRealm.createObject(DictVersionDataModel.class);
         dictDataModel.setVersion(version);
         dictDataModel.setVersionId(versionId);
         mRealm.commitTransaction();
     }
 
+    //DictLanguages DB
+    public void writetoDictLanguagesDB(int id, String languageCode, int dataStatus) {
+        mRealm.beginTransaction();
+        // Create a new object
+        DictLanguagesDataModel dictLangDataModel = mRealm.createObject(DictLanguagesDataModel.class);
+        dictLangDataModel.setId(id);
+        dictLangDataModel.setCode(languageCode);
+        dictLangDataModel.setStatus(dataStatus);
+        mRealm.commitTransaction();
+    }
 
-    public RealmResults<DictDataModel> queryAllRealmDB() {
-        RealmQuery<DictDataModel> query = mRealm.where(DictDataModel.class);
-        RealmResults<DictDataModel> resultAll = query.findAll();
+    //DictLanguagesName DB
+    public void writetoDictLanguagesNameDB(int id, int dictLanguageId, int inLanguageId, String name, int dataStatus) {
+        mRealm.beginTransaction();
+        // Create a new object
+        DictLangNameDataModel dictLangNameDataModel = mRealm.createObject(DictLangNameDataModel.class);
+        dictLangNameDataModel.setId(id);
+        dictLangNameDataModel.setdictLanguageId(dictLanguageId);
+        dictLangNameDataModel.setInLanguageId(inLanguageId);
+        dictLangNameDataModel.setName(name);
+        dictLangNameDataModel.setDataSatus(dataStatus);
+        mRealm.commitTransaction();
+    }
+
+
+    //DictSentence DB
+    public void writetoDictSentenceDB(int id,int dataStatus) {
+        mRealm.beginTransaction();
+        // Create a new object
+        DictSentenceDataModel dictSentence  = mRealm.createObject(DictSentenceDataModel.class);
+        dictSentence.setSentenceId(id);
+        dictSentence.setData_status(dataStatus);
+        mRealm.commitTransaction();
+    }
+
+    //DictSentenceTranslation DB
+    public void writetoDictSentenceTranslationDB(int id, int dictLangId, int dicSenId, String translatedsentence,String searchtext, int dataStatus) {
+        mRealm.beginTransaction();
+        // Create a new object
+        DictSentenceTranslationDataModel dictSentenceTrans  = mRealm.createObject(DictSentenceTranslationDataModel.class);
+        dictSentenceTrans.setId(id);
+        dictSentenceTrans.setDictlanguageid(dictLangId);
+        dictSentenceTrans.setDictsentenceid(dicSenId);
+        dictSentenceTrans.setTranslated_sentence(translatedsentence);
+        dictSentenceTrans.setSearching_text(searchtext);
+        dictSentenceTrans.setData_status(dataStatus);
+        mRealm.commitTransaction();
+    }
+
+    public RealmResults<DictSentenceTranslationDataModel> queryAllRealmDB() {
+        RealmQuery<DictSentenceTranslationDataModel> query = mRealm.where(DictSentenceTranslationDataModel.class);
+        RealmResults<DictSentenceTranslationDataModel> resultAll = query.findAll();
         return resultAll;
     }
 
-    public DictDataModel getPlayListModelfromRealmDB(int versionId) {
-        RealmQuery<DictDataModel> query = mRealm.where(DictDataModel.class);
-        query.equalTo("id", versionId);
-        RealmResults<DictDataModel> result = query.findAll();
-        return result.get(0);
-    }
+//    public DictVersionDataModel getModelfromRealmDB(int versionId) {
+//        RealmQuery<DictVersionDataModel> query = mRealm.where(DictVersionDataModel.class);
+//        query.equalTo("versionId", versionId);
+//        RealmResults<DictVersionDataModel> result = query.findAll();
+//        if (result == null) {
+//            return null;
+//        }
+//        return result.get(1);
+//    }
 }

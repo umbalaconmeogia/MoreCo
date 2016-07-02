@@ -37,6 +37,15 @@ public class BaseSharedPreferences {
         return value;
     }
 
+    public void setBoolean(String key, boolean value){
+        SharedPreferences.Editor editor = mSharedPref.edit();
+        editor.putBoolean(key, value);
+        editor.commit();
+    }
+    public Boolean getBoolean (String key) {
+        boolean value = mSharedPref.getBoolean(key, false);
+        return value;
+    }
 
 
 }

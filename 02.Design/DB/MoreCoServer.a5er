@@ -52,7 +52,7 @@ PName=dict_version
 LName=辞書バージョン
 Comment=辞書バージョン
 TableOption=
-Page=Dictionary
+Page=DICTIONARY
 Left=850
 Top=350
 Field="ID","id","serial","NOT NULL",0,"","",$FFFFFFFF,""
@@ -62,7 +62,7 @@ EffectMode=None
 Color=$000000
 BkColor=$FFFFFF
 ModifiedDateTime=20160702112445
-Position="Dictionary",850,350
+Position="DICTIONARY",850,350
 
 [Relation]
 Entity1=dict_sentence
@@ -245,12 +245,12 @@ Top=100
 Field="ID","id","serial","NOT NULL",0,"","",$FFFFFFFF,""
 Field="回答内容","account","text","NOT NULL",,"","",$FFFFFFFF,""
 Field="回答親ID","password","text",,,"","",$FFFFFFFF,""
-Field="回答者ID","email","integer",,,"","",$FFFFFFFF,""
+Field="回答者ID","email","text","NOT NULL",,"","",$FFFFFFFF,""
 Field="権限","role","integer","NOT NULL",,"0","0: normal, 1: admin",$FFFFFFFF,""
 EffectMode=None
 Color=$000000
 BkColor=$FFFFFF
-ModifiedDateTime=20160630033458
+ModifiedDateTime=20160703021356
 Position="WEB",100,100
 
 [Entity]
@@ -348,12 +348,12 @@ Top=550
 Field="ID","id","serial","NOT NULL",0,"","",$FFFFFFFF,""
 Field="言語ID","dict_language_id","integer","NOT NULL",,"","",$FFFFFFFF,""
 Field="文ID","dict_sentence_id","integer","NOT NULL",,"","",$FFFFFFFF,""
-Field="翻訳","translated_sentence","text",,,"","",$FFFFFFFF,""
+Field="翻訳","translated_sentence","text","NOT NULL",,"","",$FFFFFFFF,""
 Field="検索テキスト","searching_text","text",,,"","",$FFFFFFFF,""
 EffectMode=None
 Color=$000000
 BkColor=$FFFFFF
-ModifiedDateTime=20160626220133
+ModifiedDateTime=20160703020838
 Position="DICTIONARY",250,550,457,145
 
 [Entity]

@@ -8,6 +8,7 @@ use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use app\assets\AppAsset;
+use app\components\Y;
 
 AppAsset::register($this);
 ?>
@@ -27,8 +28,8 @@ AppAsset::register($this);
 <div class="wrap">
     <?php
     NavBar::begin([
-        'brandLabel' => 'My Company',
-        'brandUrl' => Yii::$app->homeUrl,
+        'brandLabel' => Y::t('Top'),
+        'brandUrl' => ['user/ask/list-all'],
         'options' => [
             'class' => 'navbar-inverse navbar-fixed-top',
         ],
@@ -36,6 +37,10 @@ AppAsset::register($this);
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => [
+            ['label' => Y::t('Ask'), 'url' => ['user/ask/ask']],
+            ['label' => Y::t('My questions'), 'url' => ['user/ask/list-my-asks']],
+            ['label' => Y::t('Admin'), 'url' => ['admin/ask/list']],
+            /*
             ['label' => 'Home', 'url' => ['/site/index']],
             ['label' => 'About', 'url' => ['/site/about']],
             ['label' => 'Contact', 'url' => ['/site/contact']],
@@ -51,6 +56,7 @@ AppAsset::register($this);
                 . Html::endForm()
                 . '</li>'
             )
+            */
         ],
     ]);
     NavBar::end();
@@ -66,7 +72,7 @@ AppAsset::register($this);
 
 <footer class="footer">
     <div class="container">
-        <p class="pull-left">&copy; My Company <?= date('Y') ?></p>
+        <p class="pull-left">&copy; <?= Y::t('MoreCo') . ' ' . date('Y') ?></p>
 
         <p class="pull-right"><?= Yii::powered() ?></p>
     </div>

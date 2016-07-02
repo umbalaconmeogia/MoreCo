@@ -15,8 +15,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -39,25 +41,34 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 
+import io.realm.RealmResults;
+import moreco.eas.evolable.asia.moreco.BuildConfig;
 import moreco.eas.evolable.asia.moreco.Constant;
 import moreco.eas.evolable.asia.moreco.R;
+import moreco.eas.evolable.asia.moreco.adapter.SearchListAdapter;
+import moreco.eas.evolable.asia.moreco.database.DictSentenceTranslationDataModel;
+import moreco.eas.evolable.asia.moreco.database.MoreCoRealmDB;
 import moreco.eas.evolable.asia.moreco.searchtext.moreco.searchlib.SearchDataRecord;
 import moreco.eas.evolable.asia.moreco.searchtext.moreco.searchlib.SearchLib;
+import com.nhaarman.listviewanimations.appearance.simple.SwingBottomInAnimationAdapter;
 import moreco.eas.evolable.asia.moreco.util.EditTextUtils;
 import moreco.eas.evolable.asia.moreco.util.GoogleTranslateUtils;
 
 /**
  * Created by PhanVanTrung on 2016/07/02.
  */
-public class SearchFragment extends ListFragment implements GoogleApiClient.ConnectionCallbacks,
+public class SearchFragment extends Fragment implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, TextToSpeech.OnInitListener {
     private GoogleApiClient mGoogleApiClient;
     private MessageApi.MessageListener mMessageListener;
     private DataApi.DataListener mDataListener;
     private EditText mEditText;
     private GoogleTranslateUtils mTranslator;
-    private DynamicListView mSearchListView;
+    private ListView mSearchListView;
     private String mGoogleTranslateResult = "";
+    private MoreCoRealmDB mMoreCoRealmDB;
+    private SearchListAdapter mSearchListAdapter;
+    private ArrayList<String> searchResults;
 
     private TextToSpeech mTextToSpeech;
     private int count = 0;
@@ -79,13 +90,6 @@ public class SearchFragment extends ListFragment implements GoogleApiClient.Conn
         }.execute();
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        mSearchListView = (DynamicListView) getListView();
-        setupListViewAndAdapter();
-//        addListeners();
-    }
     /**
      * Setups custom adapter which enables animations when adding elements
      */
@@ -214,6 +218,8 @@ public class SearchFragment extends ListFragment implements GoogleApiClient.Conn
 
         View view = inflater.inflate(R.layout.layout_search_fragment, container, false);
 
+        mSearchListView = (ListView) view.findViewById(R.id.search_list);
+
         int SDK_INT = android.os.Build.VERSION.SDK_INT;
         if (SDK_INT > 9)
         {
@@ -221,6 +227,9 @@ public class SearchFragment extends ListFragment implements GoogleApiClient.Conn
                     .permitAll().build();
             StrictMode.setThreadPolicy(policy);
         }
+
+        mMoreCoRealmDB = new MoreCoRealmDB(getActivity());
+
         mEditText = (EditText) view.findViewById(R.id.edittext);
         mEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -234,12 +243,28 @@ public class SearchFragment extends ListFragment implements GoogleApiClient.Conn
         ((Button) view.findViewById(R.id.sendbtn)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                searchtext();
+                String searchText = "私は部屋の鍵でルームに";
+                List<SearchDataRecord> searchData = createDataJapanese();
+                List<SearchDataRecord> searchResult = SearchLib.search(searchText, SearchLib.LANG_CODE_JAPANESE, searchData, 0);
+                searchResults = new ArrayList<String>();
+
+                for (int i = 0; i < searchResult.size(); i++) {
+                    String sentence = searchResult.get(i).getSearchData();
+
+                    searchResults.add(sentence);
+                    if (BuildConfig.DEBUG) Log.d("SearchFragment", "sentence " + i + " : " + sentence);
+                }
+                ArrayAdapter adapter = new ArrayAdapter<String>(getActivity(), R.layout.search_list_layout, searchResults);
+
+//                mSearchListAdapter = new SearchListAdapter(getActivity(), searchResults);
+                mSearchListView.setAdapter(adapter);
+
                 new Translator().execute();
 //                String message = "";
 //                if (mEditText.getText() != null) {
 //                    message = mEditText.getText().toString();
 //                }
+
 
                 if (mGoogleApiClient.isConnected()) {
                     new AsyncTask<String, Void, Void>() {
@@ -278,7 +303,7 @@ public class SearchFragment extends ListFragment implements GoogleApiClient.Conn
 
         if (status == TextToSpeech.SUCCESS) {
 
-            int result = mTextToSpeech.setLanguage(Locale.US);
+            int result = mTextToSpeech.setLanguage(Locale.JAPANESE);
 
             if (result == TextToSpeech.LANG_MISSING_DATA
                     || result == TextToSpeech.LANG_NOT_SUPPORTED) {
@@ -296,7 +321,7 @@ public class SearchFragment extends ListFragment implements GoogleApiClient.Conn
     private void speakOut() {
         String text = mEditText.getText().toString();
         if (!TextUtils.isEmpty(text))
-            mTextToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, null);
+            mTextToSpeech.speak(mGoogleTranslateResult, TextToSpeech.QUEUE_FLUSH, null);
     }
 
 
@@ -360,49 +385,63 @@ public class SearchFragment extends ListFragment implements GoogleApiClient.Conn
         Toast.makeText(getActivity(), mGoogleTranslateResult , Toast.LENGTH_LONG).show();
     }
 
-    public void searchtext() {
-        String searchText = "私は部屋の鍵でルームに";
-        List<SearchDataRecord> searchData = createDataTestJapanese();
-        List<SearchDataRecord> searchResult = SearchLib.search(searchText, SearchLib.LANG_CODE_JAPANESE, searchData, 0);
-        for (int i = 0; i < searchResult.size(); i++) {
-            System.out.println(searchResult.get(i).getSearchData());
+//    public void searchtext() {
+//        String searchText = "私は部屋の鍵でルームに";
+//        List<SearchDataRecord> searchData = createDataTestJapanese();
+//        List<SearchDataRecord> searchResult = SearchLib.search(searchText, SearchLib.LANG_CODE_JAPANESE, searchData, 0);
+//        for (int i = 0; i < searchResult.size(); i++) {
+//            System.out.println(searchResult.get(i).getSearchData());
+//        }
+//    }
+
+    private List<SearchDataRecord> createDataJapanese() {
+        List<String> list = new ArrayList<>();
+        RealmResults<DictSentenceTranslationDataModel> dictsen = mMoreCoRealmDB.queryAllRealmDB();
+        for(DictSentenceTranslationDataModel model: dictsen){
+            String sentence = model.getTranslated_sentence();
+            list.add(sentence);
         }
+
+        return createDataTest(list);
     }
 
-    private static List<SearchDataRecord> createDataTestJapanese() {
-        String[] testData = {
-                "チェックインをお願いします。名前は{0}です。",
-                "これが予約確認書です。",
-                "予約してません。空いている部屋はありますか？",
-                "シングル１部屋で、２泊です。",
-                "ダブルルーム１部屋で１泊です。",
-                "ツインルーム１部屋で３泊です。",
-                "バスルーム/シャワーつきの部屋ですか？",
-                "ご予約頂いている{0}様ですね。",
-                "空いている部屋はございます。どうぞ、お泊まり下さい。",
-                "あいにく、空いている部屋はございません。",
-                "こちらのフォームにご記入下さい。",
-                "お支払はクレジットカードですか？",
-                "では、クレジットカードをお願い致します。",
-                "有難うございました。（カードを返す。）",
-                "料金は前払いとなっております。{0}ドルをお願い致します。",
-                "有難うございました。こちらが領収書です。",
-                "お部屋の番号は{0}になります。こちらが鍵です。",
-                "お部屋は２階です。",
-                "お部屋は３階です。",
-                "今、係りの者がお部屋までご案内いたします。",
-                "外出の際は、鍵をフロントにお預け下さい。",
-                "朝食はカフェテリアでお取り頂けます。",
-                "朝食は料金に含まれています。",
-                "カフェテリアは１階、あちらにございます。 (方向を手で示しながら。）",
-        };
-        return createDataTest(testData);
-    }
+//    private static  List<SearchDataRecord> createDataEnglish() {
+//    }
 
-    private static List<SearchDataRecord> createDataTest(String[] testData) {
+//    private static List<SearchDataRecord> createDataTestJapanese() {
+//        String[] testData = {
+//                "チェックインをお願いします。名前は{0}です。",
+//                "これが予約確認書です。",
+//                "予約してません。空いている部屋はありますか？",
+//                "シングル１部屋で、２泊です。",
+//                "ダブルルーム１部屋で１泊です。",
+//                "ツインルーム１部屋で３泊です。",
+//                "バスルーム/シャワーつきの部屋ですか？",
+//                "ご予約頂いている{0}様ですね。",
+//                "空いている部屋はございます。どうぞ、お泊まり下さい。",
+//                "あいにく、空いている部屋はございません。",
+//                "こちらのフォームにご記入下さい。",
+//                "お支払はクレジットカードですか？",
+//                "では、クレジットカードをお願い致します。",
+//                "有難うございました。（カードを返す。）",
+//                "料金は前払いとなっております。{0}ドルをお願い致します。",
+//                "有難うございました。こちらが領収書です。",
+//                "お部屋の番号は{0}になります。こちらが鍵です。",
+//                "お部屋は２階です。",
+//                "お部屋は３階です。",
+//                "今、係りの者がお部屋までご案内いたします。",
+//                "外出の際は、鍵をフロントにお預け下さい。",
+//                "朝食はカフェテリアでお取り頂けます。",
+//                "朝食は料金に含まれています。",
+//                "カフェテリアは１階、あちらにございます。 (方向を手で示しながら。）",
+//        };
+//        return createDataTest(testData);
+//    }
+
+    private static List<SearchDataRecord> createDataTest(List<String> testData) {
         List<SearchDataRecord> result = new ArrayList<SearchDataRecord>();
-        for (int i = 0; i < testData.length; i++) {
-            result.add(new TestSearchData(testData[i]));
+        for (int i = 0; i < testData.size(); i++) {
+            result.add(new TestSearchData(testData.get(i)));
         }
 
         return result;

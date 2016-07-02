@@ -70,12 +70,16 @@ class BaseBatsgModel extends BaseModel
 //     return $result;
 //   }
 
+  public static function findNotDeleted() {
+    return self::find()->where(['!=', 'data_status', self::DATA_STATUS_DELETE]);
+  }
+  
   /**
    * Find all record that is not deleted logically (data_status <> 9).
    */
   public static function findAllNotDeleted()
   {
-    return self::find()->where(['!=', 'data_status', self::DATA_STATUS_DELETE])->all();
+    return self::findNotDeleted()->all();
   }
 
   /**

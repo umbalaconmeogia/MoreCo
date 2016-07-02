@@ -5,6 +5,7 @@ use yii\web\Controller;
 use app\models\Ask;
 use app\models\AppUser;
 use Yii;
+use app\models\DictLanguage;
 
 class AskController extends Controller
 {
@@ -15,28 +16,9 @@ class AskController extends Controller
    */
   public function beforeAction($event)
   {
-    // Set user.
-    $loginUserEmail = Yii::$app->request->get('loginUserEmail');
-    if ($loginUserEmail) {
-      // Find AppUser
-      $appUser = AppUser::find()->where(['email' => $loginUserEmail])->one();
-      if ($appUser == null) {
-        $appUser = new AppUser([
-            'account' => $loginUserEmail,
-            'email' => $loginUserEmail,
-        ]);
-        if (!$appUser->save()) {
-          throw new \Exception("Invalid saving " . $appUser);
-        }
-      }
-      Yii::$app->session['userId'] = $appUser->id;
-    }
-    
-    // Check user id.
-    if (!isset(Yii::$app->session['userId'])) {
-      throw new \Exception("You are not login");
-    }
-    
+    $this->checkUserEmail();
+    $this->checkUserLanguage();
+
     return parent::beforeAction($event);
   }
   
@@ -65,5 +47,54 @@ class AskController extends Controller
   public function actionListAll() {
     $query = Ask::find();
     return $this->render('listAll', ['query' => $query]);
+  }
+
+  /**
+   * Set user language.
+   */
+  private function checkUserLanguage() {
+    // Set language code
+    $userLanguageCode = Yii::$app->request->get('userLanguageCode');
+    if ($userLanguageCode) {
+      // Find DictLanguage
+      $dictLanguage = DictLanguage::find()->where(['code' => $userLanguageCode])->one();
+      if ($dictLanguage) {
+        // Save into session.
+        Yii::$app->session['userLanguageId'] = $dictLanguage->id;
+      }
+    }
+    // Check user language id.
+    if (!isset(Yii::$app->session['userLanguageId'])) {
+      Yii::$app->session['userLanguageId'] = 1;
+    }
+  }
+  
+  /**
+   * Set login user email.
+   * @throws \Exception
+   */
+  private function checkUserEmail() {
+    // Set user email.
+    $userLoginEmail = Yii::$app->request->get('userLoginEmail');
+    if ($userLoginEmail) {
+      // Find AppUser
+      $appUser = AppUser::find()->where(['email' => $userLoginEmail])->one();
+      if ($appUser == null) {
+        $appUser = new AppUser([
+            'account' => $userLoginEmail,
+            'email' => $userLoginEmail,
+        ]);
+        if (!$appUser->save()) {
+          throw new \Exception("Invalid saving " . $appUser);
+        }
+      }
+      // Save into session.
+      Yii::$app->session['userLoginId'] = $appUser->id;
+    }
+    
+    // Check user id.
+    if (!isset(Yii::$app->session['userLoginId'])) {
+      throw new \Exception("You are not login");
+    }
   }
 }

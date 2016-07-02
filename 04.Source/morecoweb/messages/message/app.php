@@ -6,6 +6,6 @@
  * When add new message to a language, synchronize it in all other languages.
  */
 return array (
-  'how_to_say_in_language' => 'how_to_say_in_language',
+  'how_to_say_in_language_the_following_sentence' => 'how_to_say_in_language_the_following_sentence',
 );
 ?>

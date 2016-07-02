@@ -22,9 +22,10 @@ echo Html::activeHiddenInput($ask, 'from_language_id');
 $selectLanguageHtml = Html::activeDropDownList(
     $ask, 'to_language_id', DictLanguage::getAllDictLanguageIdNameArray(BaseController::getUserLaguageId()));
 // $howToSayHtml = $form->field($ask, 'ask_content')->textInput()->label(false);
-echo Y::t('how_to_say_in_language', [
+echo Y::t('how_to_say_in_language_the_following_sentence', [
 //     'askContent' => $howToSayHtml,
-    'selectLanguage' => $selectLanguageHtml,
+    'fromLanguage' => $ask->getFromLanguageStr(BaseController::getUserLaguageId()),
+    'toLanguage' => $selectLanguageHtml,
 ]);
 
 echo '<br /><br />' . $form->field($ask, 'ask_content')->textInput()->label(false);

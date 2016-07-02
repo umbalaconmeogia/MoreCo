@@ -87,7 +87,7 @@ class Ask extends BaseBatsgModel
      * @return string
      */
     public function getFromLanguageStr($inLanguageId) {
-      return $this->getFromLanguage()->getDictLanguageNameStr($inLanguageId);
+      return $this->fromLanguage->getDictLanguageNameStr($inLanguageId);
     }
     
     /**

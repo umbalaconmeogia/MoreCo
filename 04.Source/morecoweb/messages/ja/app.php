@@ -6,6 +6,6 @@
  * When add new message to a language, synchronize it in all other languages.
  */
 return array (
-  'how_to_say_in_language' => '{selectLanguage}ではどう言いますか？',
+  'how_to_say_in_language_the_following_sentence' => '{toLanguage}では次の{fromLanguage}の分をどう言いますか？',
 );
 ?>

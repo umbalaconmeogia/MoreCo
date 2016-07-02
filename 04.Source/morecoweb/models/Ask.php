@@ -23,6 +23,13 @@ use Yii;
  */
 class Ask extends BaseBatsgModel
 {
+	/*
+	 * answer_status constant
+	 */
+	const ANSWER_STATUS_NOT_ANSWERED = 0;
+	const ANSWER_STATUS_ANSWERED = 1;
+	const ANSWER_STATUS_CLOSED = 2;
+	
     /**
      * @inheritdoc
      */
@@ -80,5 +87,26 @@ class Ask extends BaseBatsgModel
      */
     public function getFromLanguageStr($inLanguageId) {
       return $this->getFromLanguage()->getDictLanguageNameStr($inLanguageId);
+    }
+    
+    /**
+     * getToLanguageNames
+     */
+    public function getToLanguageNames()
+    {
+    	return $this->hasMany(DictLanguageName::className(), ['to_language_id' => 'id']);
+    }
+    
+    /**
+     * 
+     * @return NULL
+     */
+    public function getAnswerStatusStr() {
+    	$statusStrs = [
+    	self::ANSWER_STATUS_NOT_ANSWERED => Y::t('Not answered'),
+    	self::ANSWER_STATUS_ANSWERED => Y::t('Answered'),
+    	self::ANSWER_STATUS_CLOSED => Y::t('Closed'),
+    	];
+    	return isset($statusStrs[$this->answer_status]) ? $statusStrs[$this->answer_status] : Y::t('Unknown');
     }
 }

@@ -6,12 +6,9 @@ import io.realm.annotations.Ignore;
 /**
  * Created by PhanVanTrung on 2016/07/02.
  */
-public class DictDataModel extends RealmObject {
+public class DictVersionDataModel extends RealmObject {
     private String version;
     private int versionId;
-
-    @Ignore
-    private int sessionId;
 
     public int getVersionId() {
         return versionId;

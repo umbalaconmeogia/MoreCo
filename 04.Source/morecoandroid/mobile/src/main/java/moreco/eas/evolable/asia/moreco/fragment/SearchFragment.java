@@ -41,6 +41,7 @@ import java.util.Locale;
 
 import moreco.eas.evolable.asia.moreco.Constant;
 import moreco.eas.evolable.asia.moreco.R;
+import moreco.eas.evolable.asia.moreco.database.MoreCoRealmDB;
 import moreco.eas.evolable.asia.moreco.searchtext.moreco.searchlib.SearchDataRecord;
 import moreco.eas.evolable.asia.moreco.searchtext.moreco.searchlib.SearchLib;
 import moreco.eas.evolable.asia.moreco.util.EditTextUtils;
@@ -58,6 +59,7 @@ public class SearchFragment extends ListFragment implements GoogleApiClient.Conn
     private GoogleTranslateUtils mTranslator;
     private DynamicListView mSearchListView;
     private String mGoogleTranslateResult = "";
+    private MoreCoRealmDB mMoreCoRealmDB;
 
     private TextToSpeech mTextToSpeech;
     private int count = 0;
@@ -221,6 +223,9 @@ public class SearchFragment extends ListFragment implements GoogleApiClient.Conn
                     .permitAll().build();
             StrictMode.setThreadPolicy(policy);
         }
+
+        mMoreCoRealmDB = new MoreCoRealmDB(getActivity());
+
         mEditText = (EditText) view.findViewById(R.id.edittext);
         mEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -234,12 +239,18 @@ public class SearchFragment extends ListFragment implements GoogleApiClient.Conn
         ((Button) view.findViewById(R.id.sendbtn)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                searchtext();
+//                searchtext();
                 new Translator().execute();
 //                String message = "";
 //                if (mEditText.getText() != null) {
 //                    message = mEditText.getText().toString();
 //                }
+
+//                String  versiondb = mMoreCoRealmDB.getModelfromRealmDB(2).getVersion();
+
+
+////
+//                Toast.makeText(getActivity(), "Downloading  with new Version :" + versiondb , Toast.LENGTH_SHORT).show();
 
                 if (mGoogleApiClient.isConnected()) {
                     new AsyncTask<String, Void, Void>() {

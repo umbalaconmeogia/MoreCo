@@ -27,26 +27,53 @@ public class MoreCoRealmDB {
         mRealm = Realm.getInstance(realmConfig);
     }
 
-    public void writetoRealmDB(String version, int versionId) {
+    //DictVersion DB
+    public void writetoDictVersionDB(String version, int versionId) {
         mRealm.beginTransaction();
         // Create a new object
-        DictDataModel dictDataModel = mRealm.createObject(DictDataModel.class);
+        DictVersionDataModel dictDataModel = mRealm.createObject(DictVersionDataModel.class);
         dictDataModel.setVersion(version);
         dictDataModel.setVersionId(versionId);
         mRealm.commitTransaction();
     }
 
+    //DictLanguages DB
+    public void writetoDictLanguagesDB(int id, String languageCode, int dataStatus) {
+        mRealm.beginTransaction();
+        // Create a new object
+        DictLanguagesDataModel dictLangDataModel = mRealm.createObject(DictLanguagesDataModel.class);
+        dictLangDataModel.setId(id);
+        dictLangDataModel.setCode(languageCode);
+        dictLangDataModel.setStatus(dataStatus);
+        mRealm.commitTransaction();
+    }
 
-    public RealmResults<DictDataModel> queryAllRealmDB() {
-        RealmQuery<DictDataModel> query = mRealm.where(DictDataModel.class);
-        RealmResults<DictDataModel> resultAll = query.findAll();
+    //DictLanguagesName DB
+    public void writetoDictLanguagesNameDB(int id, int dictLanguageId, int inLanguageId, String name, int dataStatus) {
+        mRealm.beginTransaction();
+        // Create a new object
+        DictLangNameDataModel dictLangNameDataModel = mRealm.createObject(DictLangNameDataModel.class);
+        dictLangNameDataModel.setId(id);
+        dictLangNameDataModel.setdictLanguageId(dictLanguageId);
+        dictLangNameDataModel.setInLanguageId(inLanguageId);
+        dictLangNameDataModel.setName(name);
+        dictLangNameDataModel.setDataSatus(dataStatus);
+        mRealm.commitTransaction();
+    }
+
+    public RealmResults<DictVersionDataModel> queryAllRealmDB() {
+        RealmQuery<DictVersionDataModel> query = mRealm.where(DictVersionDataModel.class);
+        RealmResults<DictVersionDataModel> resultAll = query.findAll();
         return resultAll;
     }
 
-    public DictDataModel getPlayListModelfromRealmDB(int versionId) {
-        RealmQuery<DictDataModel> query = mRealm.where(DictDataModel.class);
-        query.equalTo("id", versionId);
-        RealmResults<DictDataModel> result = query.findAll();
-        return result.get(0);
+    public DictVersionDataModel getModelfromRealmDB(int versionId) {
+        RealmQuery<DictVersionDataModel> query = mRealm.where(DictVersionDataModel.class);
+        query.equalTo("versionId", versionId);
+        RealmResults<DictVersionDataModel> result = query.findAll();
+        if (result == null) {
+            return null;
+        }
+        return result.get(1);
     }
 }

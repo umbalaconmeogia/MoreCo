@@ -1,33 +1,40 @@
 package moreco.eas.evolable.asia.moreco;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.widget.Toast;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
 
 import moreco.eas.evolable.asia.moreco.adapter.ViewPageAdapter;
+import moreco.eas.evolable.asia.moreco.database.DictLanguagesDataModel;
+import moreco.eas.evolable.asia.moreco.database.MoreCoRealmDB;
 import moreco.eas.evolable.asia.moreco.fragment.AskFragment;
 import moreco.eas.evolable.asia.moreco.fragment.HistoryFragment;
 import moreco.eas.evolable.asia.moreco.fragment.MostUseFragment;
 import moreco.eas.evolable.asia.moreco.fragment.SearchFragment;
 import moreco.eas.evolable.asia.moreco.fragment.SettingFragment;
 import moreco.eas.evolable.asia.moreco.preferences.GlobalConfig;
+import moreco.eas.evolable.asia.moreco.service.LoadDictDataService;
 import moreco.eas.evolable.asia.moreco.util.DictionaryDataUtils;
 
 public class MainActivity extends AppCompatActivity {
     private ViewPager mViewPager;
     private TabLayout mTabLayout;
     private DictionaryDataUtils mDictDataUtils;
+    private MoreCoRealmDB mMoreCoRealmDB;
 
     private GlobalConfig mGlobalConfig;
 
@@ -38,111 +45,6 @@ public class MainActivity extends AppCompatActivity {
             R.drawable.ask,
             R.drawable.setting,
     };
-
-    private class LoadDictVesion extends AsyncTask<Void, Void, Void> {
-        private ProgressDialog progress = null;
-
-        protected void onError(Exception ex) {
-        }
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            mDictDataUtils = new DictionaryDataUtils();
-            mGlobalConfig = new GlobalConfig(MainActivity.this);
-            return null;
-        }
-
-
-        @Override
-        protected void onCancelled() {
-            super.onCancelled();
-        }
-
-        @Override
-        protected void onPreExecute() {
-            //start the progress dialog
-            progress = ProgressDialog.show(MainActivity.this, null, "Confirm new dictionary version...");
-            progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            progress.setIndeterminate(true);
-            super.onPreExecute();
-        }
-
-        @Override
-
-        protected void onPostExecute(Void result) {
-            progress.dismiss();
-            super.onPostExecute(result);
-            JsonObject jsonObject = mDictDataUtils.requestDictionaryJsonObject(DictionaryDataUtils.REQUEST_DICTIONARY_VERSION_URL);
-            String version = jsonObject.get("version").getAsString();
-            int id = jsonObject.get("id").getAsInt();
-
-            String dictversion = mGlobalConfig.getKeyDictVersion();
-            int versionId = mGlobalConfig.getKeyDictVersionId();
-
-            if (dictversion.equals(version) && id == versionId) {
-                Toast.makeText(MainActivity.this, "Version" + version + "id :" + id, Toast.LENGTH_SHORT).show();
-            } else {
-                mGlobalConfig.setKeyDictVersion(version);
-                mGlobalConfig.setKeyDictVersionId(id);
-                new LoadDictData().execute();
-//                Toast.makeText(MainActivity.this, "Downloading new Version :" + version + "   id : " + id, Toast.LENGTH_SHORT).show();
-            }
-
-        }
-
-    }
-    private class LoadDictData extends AsyncTask<Void, Void, Void> {
-            private ProgressDialog progress = null;
-
-            protected void onError(Exception ex) {
-            }
-
-            @Override
-            protected Void doInBackground(Void... params) {
-                mDictDataUtils = new DictionaryDataUtils();
-                mGlobalConfig = new GlobalConfig(MainActivity.this);
-                return null;
-            }
-
-
-            @Override
-            protected void onCancelled() {
-                super.onCancelled();
-            }
-
-            @Override
-            protected void onPreExecute() {
-                //start the progress dialog
-                progress = ProgressDialog.show(MainActivity.this , null, "Downloading the new dictionary data...");
-                progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-                progress.setIndeterminate(true);
-                super.onPreExecute();
-            }
-
-            @Override
-
-            protected void onPostExecute(Void result) {
-                progress.dismiss();
-                super.onPostExecute(result);
-                JsonObject jsonObject = mDictDataUtils.requestDictionaryJsonObject(DictionaryDataUtils.REQUEST_DICTIONARY_DATA_URL);
-                String version = jsonObject.getAsJsonObject("DictVersion").get("version").getAsString();
-//                JsonArray jsonArray = jsonObject.getAsJsonObject("DictLanguages").getAsJsonArray();
-//                int id = jsonObject.get("id").getAsInt();
-//
-//                String dictversion = mGlobalConfig.getKeyDictVersion();
-//                int versionId = mGlobalConfig.getKeyDictVersionId();
-//
-                    Toast.makeText(MainActivity.this, "Downloading  with new Version :" + version , Toast.LENGTH_SHORT).show();
-
-
-            }
-
-
-        @Override
-        protected void onProgressUpdate(Void... values) {
-            super.onProgressUpdate(values);
-        }
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -160,15 +62,24 @@ public class MainActivity extends AppCompatActivity {
 
         setupTabIcons();
 
+//        Intent intent = new Intent(MainActivity.this, LoadDictDataService.class);
+//        startService(intent);
+
+        mDictDataUtils = new DictionaryDataUtils();
+        mGlobalConfig = new GlobalConfig(MainActivity.this);
+        mMoreCoRealmDB = new MoreCoRealmDB(MainActivity.this);
+
         new LoadDictVesion().execute();
+
+        if (mGlobalConfig.getKeyMusttoUpdateDictData()) {
+            new LoadDictData().execute();
+        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
     }
-
-
 
 
     @Override
@@ -204,5 +115,126 @@ public class MainActivity extends AppCompatActivity {
         mTabLayout.getTabAt(2).setIcon(tabIcons[2]);
         mTabLayout.getTabAt(3).setIcon(tabIcons[3]);
         mTabLayout.getTabAt(4).setIcon(tabIcons[4]);
+    }
+
+    private class LoadDictVesion extends AsyncTask<Void, Void, Void> {
+        private ProgressDialog progress = null;
+
+        protected void onError(Exception ex) {
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            return null;
+        }
+
+
+        @Override
+        protected void onCancelled() {
+            super.onCancelled();
+        }
+
+        @Override
+        protected void onPreExecute() {
+            //start the progress dialog
+            progress = ProgressDialog.show(MainActivity.this, null, "Confirm new dictionary version...");
+            progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            progress.setIndeterminate(true);
+            super.onPreExecute();
+        }
+
+        @Override
+
+        protected void onPostExecute(Void result) {
+            progress.dismiss();
+            super.onPostExecute(result);
+            JsonObject jsonObject = mDictDataUtils.requestDictionaryJsonObject(DictionaryDataUtils.REQUEST_DICTIONARY_VERSION_URL);
+            String version = jsonObject.get("version").getAsString();
+            int id = jsonObject.get("id").getAsInt();
+
+            String dictversion = mGlobalConfig.getKeyDictVersion();
+            int versionId = mGlobalConfig.getKeyDictVersionId();
+
+            if (dictversion.equals(version) && id == versionId) {
+                mGlobalConfig.setKeyMusttoUpdateDictData(false);
+                Toast.makeText(MainActivity.this, "Version" + version + "id :" + id, Toast.LENGTH_SHORT).show();
+            } else {
+                mGlobalConfig.setKeyDictVersion(version);
+                mGlobalConfig.setKeyDictVersionId(id);
+                mGlobalConfig.setKeyMusttoUpdateDictData(true);
+            }
+
+        }
+
+    }
+
+    private class LoadDictData extends AsyncTask<Void, Void, Void> {
+        private ProgressDialog progress = null;
+
+        protected void onError(Exception ex) {
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+//                mDictDataUtils = new DictionaryDataUtils();
+//                mGlobalConfig = new GlobalConfig(MainActivity.this);
+            return null;
+        }
+
+
+        @Override
+        protected void onCancelled() {
+            super.onCancelled();
+        }
+
+        @Override
+        protected void onPreExecute() {
+            //start the progress dialog
+            progress = ProgressDialog.show(MainActivity.this, null, "Downloading the new dictionary data...");
+            progress.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            progress.setIndeterminate(true);
+            super.onPreExecute();
+        }
+
+        @Override
+
+        protected void onPostExecute(Void result) {
+            progress.dismiss();
+            super.onPostExecute(result);
+            JsonObject jsonObject = mDictDataUtils.requestDictionaryJsonObject(DictionaryDataUtils.REQUEST_DICTIONARY_DATA_URL);
+            String version = jsonObject.getAsJsonObject("DictVersion").get("version").getAsString();
+            int versionId = jsonObject.getAsJsonObject("DictVersion").get("id").getAsInt();
+
+            mMoreCoRealmDB.writetoDictVersionDB(version, versionId);
+            JsonArray dictLanguages = jsonObject.getAsJsonArray("DictLanguages");
+            if (BuildConfig.DEBUG) {
+                Log.d("LoadDictData", "dictLanguages.size():" + dictLanguages.size());
+            }
+
+            for (JsonElement jsonElement : dictLanguages) {
+                int id = jsonElement.getAsJsonObject().get("id").getAsInt();
+                String code = jsonElement.getAsJsonObject().get("code").getAsString();
+                int status = jsonElement.getAsJsonObject().get("data_status").getAsInt();
+                if (BuildConfig.DEBUG)
+                    Log.d("LoadDictData", "Success insert id :" + id + "  code : " + code + "  status" + status);
+                mMoreCoRealmDB.writetoDictLanguagesDB(id, code, status);
+            }
+
+
+          JsonArray dictLanguagesNames = jsonObject.getAsJsonArray("DictLanguageNames");
+            for (JsonElement dictlanguagesname : dictLanguagesNames) {
+                int id = dictlanguagesname.getAsJsonObject().get("id").getAsInt();
+                int language_id = dictlanguagesname.getAsJsonObject().get("dict_language_id").getAsInt();
+                int in_language_id = dictlanguagesname.getAsJsonObject().get("in_language_id").getAsInt();
+                int status = dictlanguagesname.getAsJsonObject().get("data_status").getAsInt();
+                String name = dictlanguagesname.getAsJsonObject().get("name").getAsString();
+                mMoreCoRealmDB.writetoDictLanguagesNameDB(id, language_id, in_language_id, name, status);
+            }
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... values) {
+            super.onProgressUpdate(values);
+        }
     }
 }

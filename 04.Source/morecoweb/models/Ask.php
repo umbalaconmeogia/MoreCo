@@ -65,4 +65,20 @@ class Ask extends BaseBatsgModel
             'update_user_id' => 'Update User ID',
         ];
     }
+
+    /**
+     * @return DictLanguage
+     */
+    public function getFromLanguage() {
+      return $this->hasOne(DictLanguage::className(), ['id' => 'from_language_id']);
+    }
+    
+    /**
+     * Get name of from language in specified language.
+     * @param int $inLanguageId Specified language.
+     * @return string
+     */
+    public function getFromLanguageStr($inLanguageId) {
+      return $this->getFromLanguage()->getDictLanguageNameStr($inLanguageId);
+    }
 }

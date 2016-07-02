@@ -30,13 +30,22 @@ $config = [
             'useFileTransport' => true,
         ],
         'log' => [
-            'traceLevel' => YII_DEBUG ? 3 : 0,
+            'traceLevel' => YII_DEBUG ? 0 : 0,
             'targets' => [
                 [
                     'class' => 'yii\log\FileTarget',
                     'levels' => ['error', 'warning'],
+                    'logVars' => [],
+                    'except' => ['yii\db\*'],
                 ],
-            ],
+                [
+                    'class' => 'yii\log\FileTarget',
+                    'levels' => ['warning', 'info'],
+                    'logVars' => [],
+                    'categories' => ['yii\db\*'],
+                    'logFile' => '@app/runtime/logs/sql.log',
+                ],
+             ],
         ],
         'db' => require(__DIR__ . '/db.php'),
         /*

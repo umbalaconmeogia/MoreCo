@@ -5,9 +5,12 @@ use Yii;
 
 class Y {
   /**
-   * Wrapper of Yii::t
+   * Wrapper of Yii::t()
+   * @param string $message
+   * @param array $params
+   * @param string $category
    */
-  public static function t($message, $category = 'app') {
-    return Yii::t($category, $message);
+  public static function t($message, $params = [], $category = 'app') {
+    return Yii::t($category, $message, $params);
   }
 }

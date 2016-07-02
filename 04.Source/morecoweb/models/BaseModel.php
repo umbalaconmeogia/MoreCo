@@ -50,11 +50,25 @@ class BaseModel extends \yii\db\ActiveRecord
    * @return array field $keyValue => ($value or model).
    */
   public static function hashModels($models, $keyField = 'id', $valueField = NULL) {
-    $hash = array();
+    $hash = [];
     foreach ($models as $model) {
       $hash[$model->$keyField] = $valueField ? $model->$valueField : $model;
     }
     return $hash;
+  }
+  
+  /**
+   * Create an array of model's field value.
+   * @param CActiveRecord $models
+   * @param string $keyField
+   * @return array
+   */
+  public static function getArrayOfFieldValue($models, $keyField = 'id') {
+    $values = [];
+    foreach ($models as $model) {
+      $values[] = $model->$keyField;
+    }
+    return $values;
   }
   
   public function __toString()

@@ -49,4 +49,8 @@ class DictSentence extends BaseBatsgModel
             'update_user_id' => 'Update User ID',
         ];
     }
+    
+    public function getDictSentenceTranslations() {
+      return $this->hasMany(DictSentenceTranslation::className(), ['dict_sentence_id' => 'id']);
+    }
 }

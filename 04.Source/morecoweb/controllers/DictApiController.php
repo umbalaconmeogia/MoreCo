@@ -17,12 +17,12 @@ class DictApiController extends Controller {
    * @return \yii\db\ActiveRecord|NULL
    */
   public function actionVersion() {
-    $dictVersion = DictVersion::find ()->orderBy ( [ 
+    $dictVersion = DictVersion::find()->orderBy([ 
         'id' => SORT_DESC 
-    ] )->select ( [ 
+    ])->select([
         'id',
         'version' 
-    ] )->one ();
+    ])->one();
     \Yii::$app->response->format = 'json';
     return $dictVersion;
   }
@@ -31,39 +31,54 @@ class DictApiController extends Controller {
    * Return all dict data in JSON.
    */
   public function actionData() {
-    $dictVersion = DictVersion::find ()->orderBy ( [ 
+    // Get DictVersion.
+    $dictVersion = DictVersion::find()->orderBy([ 
         'id' => SORT_DESC 
-    ] )->select ( [ 
+    ])->select([
         'id',
         'version' 
-    ] )->one ();
-    $dictLanguages = DictLanguage::find ()->select ( [ 
+    ])->one();
+    // Get DictLanguage list.
+    $dictLanguages = DictLanguage::find()->select([ 
         'id',
         'code',
         'data_status' 
-    ] )->all ();
-    $dictLanguageNames = DictLanguageName::find ()->select ( [ 
+    ])->all();
+    // Get DictLanguageName list.
+    $dictLanguageNames = DictLanguageName::find()->select([ 
         'id',
         'dict_language_id',
         'in_language_id',
         'name',
         'data_status' 
-    ] )->all ();
-    $dictSentences = DictSentence::find ()->select ( [ 
+    ])->all();
+    // Get DictSentence list.
+    $dictSentences = DictSentence::find()->select([ 
         'id',
         'data_status' 
-    ] )->all ();
-    $dictSentenceTranslations = DictSentenceTranslation::find ()->select ( [ 
+    ])->all();
+    // Get DictSentenceTranslation list.
+    $dictSentenceTranslations = DictSentenceTranslation::find()->select([ 
         'id',
         'dict_language_id',
         'dict_sentence_id',
         'translated_sentence',
         'searching_text',
         'data_status' 
-    ] )->all ();
+    ])->all();
+    
+    // Limit return result. Just for test.
+    $maxDictSentenceNumber = Yii::$app->request->get('maxDictSentenceNumber');
+    if ($maxDictSentenceNumber) {
+      $dictSentences = array_slice($dictSentences, 0, $maxDictSentenceNumber);
+      $dictSentenceTranslations = array_slice(
+          $dictSentenceTranslations, 0, $maxDictSentenceNumber * count($dictLanguages));
+    }
+    
+    // Set return result.
     $result = [ 
         'DictVersion' => $dictVersion,
-        'DictLanguage' => $dictLanguages,
+        'DictLanguages' => $dictLanguages,
         'DictLanguageNames' => $dictLanguageNames,
         'DictSentences' => $dictSentences,
         'DictSentenceTranslations' => $dictSentenceTranslations,

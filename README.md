@@ -84,6 +84,20 @@ NameVirtualHost *:443
 chmod 777 /home/moreco/web/morecoweb/runtime
 ```
 
+#### 初期データ設定
+
+ウェブサーバ上に以下のシェルコマンド実行
+```
+$ cd /home/moreco/web/morecoweb/data/01.Schema
+$ sh MoreCoServer.bat
+Password for user moreco:QZoNYD2nbp
+$ cd /home/moreco/web/morecoweb/data/02.InitialData
+$ sh InitialData.bat
+$ cd /home/moreco/web/morecoweb/data/03.DictData
+$ sh DictData.bat
+$ cd /home/moreco/web/morecoweb/data/04.AskDummyData
+$ sh AskDummyData.bat
+```
 #### テスト
 
 * Androidアプリからクエスチョンマーク（？）アイコンを押下して開く。

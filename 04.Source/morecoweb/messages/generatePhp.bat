@@ -1,0 +1,1 @@
+../yii i18n/generate-message-files

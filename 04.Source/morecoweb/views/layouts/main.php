@@ -29,7 +29,7 @@ AppAsset::register($this);
     <?php
     NavBar::begin([
         'brandLabel' => Y::t('Top'),
-        'brandUrl' => Yii::$app->homeUrl,
+        'brandUrl' => ['user/ask/list-all'],
         'options' => [
             'class' => 'navbar-inverse navbar-fixed-top',
         ],
@@ -38,7 +38,7 @@ AppAsset::register($this);
         'options' => ['class' => 'navbar-nav navbar-right'],
         'items' => [
             ['label' => Y::t('Ask'), 'url' => ['user/ask/ask']],
-            ['label' => Y::t('My questions'), 'url' => ['user/ask/list-mine']],
+            ['label' => Y::t('My questions'), 'url' => ['user/ask/list-my-asks']],
             ['label' => Y::t('Admin'), 'url' => ['admin/ask/list']],
             /*
             ['label' => 'Home', 'url' => ['/site/index']],
@@ -72,7 +72,7 @@ AppAsset::register($this);
 
 <footer class="footer">
     <div class="container">
-        <p class="pull-left">&copy; My Company <?= date('Y') ?></p>
+        <p class="pull-left">&copy; <?= Y::t('MoreCo') . ' ' . date('Y') ?></p>
 
         <p class="pull-right"><?= Yii::powered() ?></p>
     </div>

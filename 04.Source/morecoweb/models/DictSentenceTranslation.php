@@ -34,7 +34,7 @@ class DictSentenceTranslation extends BaseBatsgModel
     public function rules()
     {
         return [
-            [['dict_language_id', 'dict_sentence_id'], 'required'],
+            [['dict_language_id', 'dict_sentence_id', 'translated_sentence'], 'required'],
             [['dict_language_id', 'dict_sentence_id', 'data_status', 'create_user_id', 'update_user_id'], 'integer'],
             [['translated_sentence', 'searching_text'], 'string'],
             [['create_time', 'update_time'], 'safe'],

@@ -10,7 +10,7 @@ use Yii;
  * @property integer $id
  * @property string $account
  * @property string $password
- * @property integer $email
+ * @property string $email
  * @property integer $role
  * @property integer $data_status
  * @property string $create_time
@@ -34,9 +34,9 @@ class AppUser extends BaseBatsgModel
     public function rules()
     {
         return [
-            [['account'], 'required'],
-            [['account', 'password'], 'string'],
-            [['email', 'role', 'data_status', 'create_user_id', 'update_user_id'], 'integer'],
+            [['account', 'email'], 'required'],
+            [['account', 'password', 'email'], 'string'],
+            [['role', 'data_status', 'create_user_id', 'update_user_id'], 'integer'],
             [['create_time', 'update_time'], 'safe'],
         ];
     }

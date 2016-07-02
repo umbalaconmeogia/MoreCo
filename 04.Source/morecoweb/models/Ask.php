@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use app\components\Y;
 
 /**
  * This is the model class for table "ask".

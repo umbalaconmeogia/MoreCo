@@ -2,8 +2,8 @@
 
 return [
     'class' => 'yii\db\Connection',
-    'dsn' => 'mysql:host=localhost;dbname=yii2basic',
-    'username' => 'root',
-    'password' => '',
+    'dsn' => 'pgsql:host=morecodb;port=5432;dbname=moreco', 
+    'username' => 'moreco',
+    'password' => 'QZoNYD2nbp',
     'charset' => 'utf8',
 ];

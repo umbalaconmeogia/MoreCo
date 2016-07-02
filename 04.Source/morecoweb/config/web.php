@@ -40,7 +40,7 @@ $config = [
                 ],
                 [
                     'class' => 'yii\log\FileTarget',
-                    'levels' => ['warning', 'info'],
+                    'levels' => ['warning'],
                     'logVars' => [],
                     'categories' => ['yii\db\*'],
                     'logFile' => '@app/runtime/logs/sql.log',

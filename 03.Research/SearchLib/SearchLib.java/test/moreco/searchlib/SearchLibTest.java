@@ -1,10 +1,7 @@
-package morecore.searchlib;
+package moreco.searchlib;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import moreco.searchlib.SearchDataRecord;
-import moreco.searchlib.SearchLib;
 
 public class SearchLibTest {
 

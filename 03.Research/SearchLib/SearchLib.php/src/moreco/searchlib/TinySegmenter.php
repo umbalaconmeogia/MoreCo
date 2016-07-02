@@ -4,7 +4,7 @@
 // TinySegmenter is freely distributable under the terms of a new BSD licence.
 // For details, see http://chasen.org/~taku/software/TinySegmenter/LICENCE.txt
 
-/* 
+/*
 // PHP translation by Omi; http://design-arts.jp/.
 // version 20130409
 //
@@ -18,6 +18,8 @@ $segment = $t->segment();
 var_dump($segment); // gets segmented list of words.
 
 // */
+namespace moreco\searchlib;
+
 mb_regex_encoding('utf-8');
 
 class TinySegmenter {
@@ -100,7 +102,7 @@ function segment($input='') {
  $p1 = "U";
  $p2 = "U";
  $p3 = "U";
- 
+
  for ($i = 4; $i < count($seg) - 3; ++$i) {
   $score = $this->dictionary['BIAS__'];
   $w1 = $seg[$i-3];
@@ -146,7 +148,7 @@ function segment($input='') {
   $score += $this->ts($this->dictionary['TC2__'][$c2 . $c3 . $c4]);
   $score += $this->ts($this->dictionary['TC3__'][$c3 . $c4 . $c5]);
   $score += $this->ts($this->dictionary['TC4__'][$c4 . $c5 . $c6]);
-//  $score += $this->ts($this->dictionary['TC5__'][$c4 + $c5 + $c6]);    
+//  $score += $this->ts($this->dictionary['TC5__'][$c4 + $c5 + $c6]);
   $score += $this->ts($this->dictionary['UQ1__'][$p1 . $c1]);
   $score += $this->ts($this->dictionary['UQ2__'][$p2 . $c2]);
   $score += $this->ts($this->dictionary['UQ3__'][$p3 . $c3]);
@@ -158,7 +160,7 @@ function segment($input='') {
   $score += $this->ts($this->dictionary['TQ2__'][$p2 . $c2 . $c3 . $c4]);
   $score += $this->ts($this->dictionary['TQ3__'][$p3 . $c1 . $c2 . $c3]);
   $score += $this->ts($this->dictionary['TQ4__'][$p3 . $c2 . $c3 . $c4]);
-    
+
   $p = "O";
   if ($score > 0) {
    $result[] = $word;

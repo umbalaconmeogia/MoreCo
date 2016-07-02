@@ -53,4 +53,15 @@ class DictSentence extends BaseBatsgModel
     public function getDictSentenceTranslations() {
       return $this->hasMany(DictSentenceTranslation::className(), ['dict_sentence_id' => 'id']);
     }
+    
+    /**
+     * @param int $languageId
+     * @return DictSentenceTranslation
+     */
+    public function getDictSentenceTranslation($languageId) {
+      $transHashLanguage = DictSentenceTranslation::hashModels($this->dictSentenceTranslations, 'dict_language_id');
+      $result = isset($transHashLanguage[$languageId]) ?
+          $transHashLanguage[$languageId] : array_values($transHashLanguage)[0]; 
+      return $result;
+    }
 }

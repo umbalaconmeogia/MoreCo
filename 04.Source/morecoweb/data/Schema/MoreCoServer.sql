@@ -1,10 +1,25 @@
 \encoding utf8
 
 -- Project Name : MoreCo
--- Date/Time    : 2016/07/01 11:26:10
+-- Date/Time    : 2016/07/02 11:24:55
 -- Author       : Thanh
 -- RDBMS Type   : PostgreSQL
 -- Application  : A5:SQL Mk-2
+
+-- 辞書バージョン
+drop table if exists "dict_version" cascade;
+
+create table "dict_version" (
+  "id" serial not null
+  , "version" text not null
+  , "comment" text
+  , "data_status" integer default 1 not null
+  , "create_time" timestamp
+  , "create_user_id" integer
+  , "update_time" timestamp
+  , "update_user_id" integer
+  , constraint "dict_version_PKC" primary key ("id")
+) ;
 
 -- ユーザ
 drop table if exists "app_user" cascade;
@@ -120,6 +135,12 @@ create table "dict_language" (
   , "update_user_id" integer
   , constraint "dict_language_PKC" primary key ("id")
 ) ;
+
+comment on table "dict_version" is '辞書バージョン	 辞書バージョン';
+comment on column "dict_version"."id" is 'ID';
+comment on column "dict_version"."version" is 'バージョン番号';
+comment on column "dict_version"."comment" is 'コメント';
+comment on column "dict_version"."data_status" is '1: new, 2: update, 9: delete';
 
 comment on table "app_user" is 'ユーザ';
 comment on column "app_user"."id" is 'ID';

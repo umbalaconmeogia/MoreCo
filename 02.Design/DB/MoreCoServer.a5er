@@ -47,6 +47,23 @@ SqlSeparator=0
 ShowTag=1
 ShowCommonAttributes=0
 
+[Entity]
+PName=dict_version
+LName=辞書バージョン
+Comment=辞書バージョン
+TableOption=
+Page=Dictionary
+Left=850
+Top=350
+Field="ID","id","serial","NOT NULL",0,"","",$FFFFFFFF,""
+Field="バージョン番号","version","text","NOT NULL",,"","",$FFFFFFFF,""
+Field="コメント","comment","text",,,"","",$FFFFFFFF,""
+EffectMode=None
+Color=$000000
+BkColor=$FFFFFF
+ModifiedDateTime=20160702112445
+Position="Dictionary",850,350
+
 [Relation]
 Entity1=dict_sentence
 Entity2=ask

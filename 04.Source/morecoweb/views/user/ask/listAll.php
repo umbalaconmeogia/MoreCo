@@ -5,13 +5,12 @@ use app\models\Ask;
 
 $dataProvider = new ActiveDataProvider([
     'query' => Ask::find(),
-//     'pagination' => [
-//         'pageSize' => 20,
-//     ],
+    'pagination' => [
+        'pageSize' => 10,
+    ],
 ]);
-$content = ListView::widget([
+echo ListView::widget([
     'dataProvider' => $dataProvider,
     'itemView' => '_listAllAsks',
 ]);
-echo $this->render('/common/_tabs', ['tabId' => 'listAll', 'content' => $content]);
 ?>

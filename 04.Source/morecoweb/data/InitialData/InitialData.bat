@@ -1,0 +1,1 @@
+../../yii import-data/import-from-csv --inputCsv=InitialData.csv --truncate=1

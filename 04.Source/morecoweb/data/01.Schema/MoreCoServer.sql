@@ -1,7 +1,7 @@
 \encoding utf8
 
 -- Project Name : MoreCo
--- Date/Time    : 2016/07/02 11:24:55
+-- Date/Time    : 2016/07/03 2:14:05
 -- Author       : Thanh
 -- RDBMS Type   : PostgreSQL
 -- Application  : A5:SQL Mk-2
@@ -28,7 +28,7 @@ create table "app_user" (
   "id" serial not null
   , "account" text not null
   , "password" text
-  , "email" integer
+  , "email" text not null
   , "role" integer default 0 not null
   , "data_status" integer default 1 not null
   , "create_time" timestamp
@@ -83,7 +83,7 @@ create table "dict_sentence_translation" (
   "id" serial not null
   , "dict_language_id" integer not null
   , "dict_sentence_id" integer not null
-  , "translated_sentence" text
+  , "translated_sentence" text not null
   , "searching_text" text
   , "data_status" integer default 1 not null
   , "create_time" timestamp

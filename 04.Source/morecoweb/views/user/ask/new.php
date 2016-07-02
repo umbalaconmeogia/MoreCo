@@ -10,7 +10,8 @@ use yii\helpers\Html;
 use app\models\DictLanguage;
 ?>
 <?php $form = ActiveForm::begin([
-    'id' => 'login-form',
+    'id' => 'ask-form',
+    'action' => ['ask'],
     'options' => ['class' => 'form-horizontal'],
 ]);?>
 <?php
@@ -22,4 +23,6 @@ echo Y::t('How to say {askContent} in {selectLanguage} ', [
     'selectLanguage' => $selectLanguageHtml,
 ]);
 ?>
+<br /><br />
+<div><?= Html::submitButton('Submit', ['class' => 'btn btn-primary']) ?></div>
 <?php ActiveForm::end() ?>

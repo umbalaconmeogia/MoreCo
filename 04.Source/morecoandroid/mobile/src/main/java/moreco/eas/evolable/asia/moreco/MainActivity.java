@@ -212,23 +212,34 @@ public class MainActivity extends AppCompatActivity {
             }
 
             for (JsonElement jsonElement : dictLanguages) {
-                int id = jsonElement.getAsJsonObject().get("id").getAsInt();
+                int langid = jsonElement.getAsJsonObject().get("id").getAsInt();
                 String code = jsonElement.getAsJsonObject().get("code").getAsString();
-                int status = jsonElement.getAsJsonObject().get("data_status").getAsInt();
+                int status1 = jsonElement.getAsJsonObject().get("data_status").getAsInt();
                 if (BuildConfig.DEBUG)
-                    Log.d("LoadDictData", "Success insert id :" + id + "  code : " + code + "  status" + status);
-                mMoreCoRealmDB.writetoDictLanguagesDB(id, code, status);
+                    Log.d("LoadDictData", "Success insert id :" + langid + "  code : " + code + "  status" + status1);
+                mMoreCoRealmDB.writetoDictLanguagesDB(langid, code, status1);
             }
 
 
           JsonArray dictLanguagesNames = jsonObject.getAsJsonArray("DictLanguageNames");
             for (JsonElement dictlanguagesname : dictLanguagesNames) {
-                int id = dictlanguagesname.getAsJsonObject().get("id").getAsInt();
+                int langnameid = dictlanguagesname.getAsJsonObject().get("id").getAsInt();
                 int language_id = dictlanguagesname.getAsJsonObject().get("dict_language_id").getAsInt();
                 int in_language_id = dictlanguagesname.getAsJsonObject().get("in_language_id").getAsInt();
-                int status = dictlanguagesname.getAsJsonObject().get("data_status").getAsInt();
+                int status2 = dictlanguagesname.getAsJsonObject().get("data_status").getAsInt();
                 String name = dictlanguagesname.getAsJsonObject().get("name").getAsString();
-                mMoreCoRealmDB.writetoDictLanguagesNameDB(id, language_id, in_language_id, name, status);
+                mMoreCoRealmDB.writetoDictLanguagesNameDB(langnameid, language_id, in_language_id, name, status2);
+            }
+
+            JsonArray dictSentenceTranslations = jsonObject.getAsJsonArray("DictSentenceTranslations");
+            for (JsonElement dictsentenceTranslation : dictSentenceTranslations) {
+                int sentransid = dictsentenceTranslation.getAsJsonObject().get("id").getAsInt();
+                int dict_language_id = dictsentenceTranslation.getAsJsonObject().get("dict_language_id").getAsInt();
+                int dict_sentence_id = dictsentenceTranslation.getAsJsonObject().get("dict_sentence_id").getAsInt();
+                String  translated_sentence = dictsentenceTranslation.getAsJsonObject().get("translated_sentence").getAsString();
+                String  search_tex = dictsentenceTranslation.getAsJsonObject().get("searching_text").getAsString();
+                int senttranstatus = dictsentenceTranslation.getAsJsonObject().get("data_status").getAsInt();
+                mMoreCoRealmDB.writetoDictSentenceTranslationDB(sentransid, dict_language_id, dict_sentence_id, translated_sentence, search_tex,senttranstatus);
             }
         }
 

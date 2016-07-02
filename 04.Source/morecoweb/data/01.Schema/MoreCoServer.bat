@@ -1,1 +1,1 @@
-psql -U moreco -h morecodb -d moreco -f MoreCoServer.sql
+psql -U moreco -h morecodb -d moreco -p 3433 -f MoreCoServer.sql

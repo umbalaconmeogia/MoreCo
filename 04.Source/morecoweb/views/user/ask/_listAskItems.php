@@ -26,5 +26,7 @@ use app\models\DictSentence;
     echo Html::encode($dictSentenceTranslation->translated_sentence);
   ?></strong>
 </div>
+<?php } else { ?>
+  <?= Y::t('not_replied') ?>
 <?php } ?>
 </div>

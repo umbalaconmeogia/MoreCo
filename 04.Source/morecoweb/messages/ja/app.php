@@ -10,6 +10,7 @@ return array (
   'how_to_say_in_language_the_following_sentence' => '{toLanguage}では次の{fromLanguage}の分をどう言いますか？',
   'list_all_asks' => '全質問一覧',
   'list_my_asks' => '自分の質問一覧',
+  'not_replied' => '未回答',
   'post_question' => '質問投稿',
   'reply' => '回答',
   'submit' => '投稿',

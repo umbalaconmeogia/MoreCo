@@ -9,6 +9,7 @@ use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use app\assets\AppAsset;
 use app\components\Y;
+use app\components\BaseController;
 
 AppAsset::register($this);
 ?>
@@ -34,30 +35,16 @@ AppAsset::register($this);
             'class' => 'navbar-inverse navbar-fixed-top',
         ],
     ]);
+    $menuItems = [
+        ['label' => Y::t('post_question'), 'url' => ['user/ask/new']],
+        ['label' => Y::t('list_my_asks'), 'url' => ['user/ask/list-my-asks']],
+    ];
+    if (BaseController::getUserId() == 1) {
+      $menuItems[] = ['label' => Y::t('Admin'), 'url' => ['admin/ask/list']];
+    }
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav navbar-right'],
-        'items' => [
-            ['label' => Y::t('post_question'), 'url' => ['user/ask/new']],
-            ['label' => Y::t('list_my_asks'), 'url' => ['user/ask/list-my-asks']],
-            ['label' => Y::t('Admin'), 'url' => ['admin/ask/list']],
-            /*
-            ['label' => 'Home', 'url' => ['/site/index']],
-            ['label' => 'About', 'url' => ['/site/about']],
-            ['label' => 'Contact', 'url' => ['/site/contact']],
-            Yii::$app->user->isGuest ? (
-                ['label' => 'Login', 'url' => ['/site/login']]
-            ) : (
-                '<li>'
-                . Html::beginForm(['/site/logout'], 'post', ['class' => 'navbar-form'])
-                . Html::submitButton(
-                    'Logout (' . Yii::$app->user->identity->username . ')',
-                    ['class' => 'btn btn-link']
-                )
-                . Html::endForm()
-                . '</li>'
-            )
-            */
-        ],
+        'items' => $menuItems,
     ]);
     NavBar::end();
     ?>

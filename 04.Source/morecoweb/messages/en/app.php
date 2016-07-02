@@ -10,6 +10,7 @@ return array (
   'how_to_say_in_language_the_following_sentence' => 'How to say in {toLanguage} the following {fromLanguage} sentence?',
   'list_all_asks' => 'List all questions',
   'list_my_asks' => 'List my questions',
+  'not_replied' => 'Not replied',
   'post_question' => 'Post a question',
   'reply' => 'Reply',
   'submit' => 'Submit',

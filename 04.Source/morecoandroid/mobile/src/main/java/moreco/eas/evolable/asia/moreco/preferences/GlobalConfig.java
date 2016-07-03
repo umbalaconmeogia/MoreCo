@@ -10,6 +10,9 @@ public class GlobalConfig extends BaseSharedPreferences {
     public final static String  KEY_MUSTTO_UPDATE_DICT_DATA  = "key_mustto_update_dict_data";
     public final static String  KEY_DICT_VERSION  = "key_dict_version";
     public final static String  KEY_DICT_VERSION_ID  = "key_dict_version_id";
+    public final static String  KEY_ACCOUNT  = "key_account";
+
+    public final static String  DEFAULT_ACCOUNT = "example@gmail.com";
 
     private BaseSharedPreferences mBaseSharedPreferences;
 
@@ -42,4 +45,11 @@ public class GlobalConfig extends BaseSharedPreferences {
         mBaseSharedPreferences.setBoolean(KEY_MUSTTO_UPDATE_DICT_DATA,value);
     }
 
+    public  String getKeyAccount() {
+        return mBaseSharedPreferences.getString(KEY_ACCOUNT);
+    }
+
+    public void  setKeyAccount(String account) {
+        mBaseSharedPreferences.setString(KEY_ACCOUNT, account);
+    }
 }

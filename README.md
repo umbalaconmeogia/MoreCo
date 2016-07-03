@@ -1,5 +1,13 @@
 # MoreCo（モア子）＠SBCloud Hackathon 2016
 
+## ソースプログラムのフォルダ
+https://github.com/umbalaconmeogia/MoreCo/tree/master/04.Source
+プログラム構成
+
+* Android スマホアプリ: https://github.com/umbalaconmeogia/MoreCo/tree/master/04.Source/morecoandroid
+* Android Wearアプリ: Android スマホアプリと同フォルダ
+* ウェブシステム: https://github.com/umbalaconmeogia/MoreCo/tree/master/04.Source/morecoweb
+
 ## システム・アプリのインストール／ビルド／テスト方法
 
 ### Androidアプリのビルド／インストール

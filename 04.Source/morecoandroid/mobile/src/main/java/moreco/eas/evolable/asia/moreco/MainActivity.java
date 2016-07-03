@@ -1,12 +1,18 @@
 package moreco.eas.evolable.asia.moreco;
 
+import android.accounts.AccountManager;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -14,6 +20,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.auth.GoogleAuthUtil;
+import com.google.android.gms.common.AccountPicker;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -23,9 +31,11 @@ import moreco.eas.evolable.asia.moreco.database.MoreCoRealmDB;
 import moreco.eas.evolable.asia.moreco.fragment.AskFragment;
 import moreco.eas.evolable.asia.moreco.fragment.SearchFragment;
 import moreco.eas.evolable.asia.moreco.preferences.GlobalConfig;
+import moreco.eas.evolable.asia.moreco.service.LoadDictDataService;
 import moreco.eas.evolable.asia.moreco.util.DictionaryDataUtils;
 
 public class MainActivity extends AppCompatActivity {
+    public static final int REQUEST_CODE =3;
     private ViewPager mViewPager;
     private TabLayout mTabLayout;
     private DictionaryDataUtils mDictDataUtils;
@@ -47,6 +57,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Intent googlePicker = AccountPicker.newChooseAccountIntent(null, null, new String[]{GoogleAuthUtil.GOOGLE_ACCOUNT_TYPE}, true, null, null, null, null);
+        startActivityForResult(googlePicker, REQUEST_CODE);
+
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -89,9 +103,6 @@ public class MainActivity extends AppCompatActivity {
 
         setupTabIcons();
 
-//        Intent intent = new Intent(MainActivity.this, LoadDictDataService.class);
-//        startService(intent);
-
         mDictDataUtils = new DictionaryDataUtils();
         mGlobalConfig = new GlobalConfig(MainActivity.this);
         mMoreCoRealmDB = new MoreCoRealmDB(MainActivity.this);
@@ -100,7 +111,24 @@ public class MainActivity extends AppCompatActivity {
 
         if (mGlobalConfig.getKeyMusttoUpdateDictData()) {
             new LoadDictData().execute();
+//          Intent intent = new Intent(MainActivity.this, LoadDictDataService.class);
+//          startService(intent);
         }
+
+        mLang1Btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+
+            }
+        });
+
+        mLang2Btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
     }
 
     @Override
@@ -259,9 +287,9 @@ public class MainActivity extends AppCompatActivity {
             }
 
             JsonArray dictSentences = jsonObject.getAsJsonArray("DictSentences");
-            for (JsonElement dictsentences : dictSentences) {
-                int sentenceid = dictsentences.getAsJsonObject().get("id").getAsInt();
-                int sentence_data_status = dictSentences.getAsJsonObject().get("data_status").getAsInt();
+            for (JsonElement dictsentence : dictSentences) {
+                int sentenceid = dictsentence.getAsJsonObject().get("id").getAsInt();
+                int sentence_data_status = dictsentence.getAsJsonObject().get("data_status").getAsInt();
                 mMoreCoRealmDB.writetoDictSentenceDB(sentenceid, sentence_data_status);
             }
 
@@ -281,5 +309,66 @@ public class MainActivity extends AppCompatActivity {
         protected void onProgressUpdate(Void... values) {
             super.onProgressUpdate(values);
         }
+    }
+
+//    private void showDialog (Context context,String title){
+//        AlertDialog dialog = new AlertDialog.Builder(context);
+//
+//        dialog.setTitle(title);
+//
+//        dialog.setMultiChoiceItems(menu_list, menu_list_selected, new DialogInterface.OnMultiChoiceClickListener(){
+//
+//                    public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+//
+//                        tmp_menu_list_selected[which] = isChecked;
+//
+//                    }});
+//
+//        dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+//
+//            public void onClick(DialogInterface dialog, int id) {
+//
+//                int i;
+//
+//                menu_list_selected = tmp_menu_list_selected.clone();
+//
+//                String text = "";
+//
+//                for (i = 0;i < menu_list.length;i ++) {
+//
+//                    if (menu_list_selected[i]) {
+//
+//                        if (text.length() > 0) {
+//
+//                            text += ",";
+//
+//                        }
+//
+//                        text += menu_list[i];
+//
+//                    }
+//
+//                }
+//
+//                Toast.makeText(Test_program_3Activity.this, text, Toast.LENGTH_LONG).show();
+//
+//            }});
+//
+//        dialog.show();
+//    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
+            String accountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
+           if (TextUtils.isEmpty(accountName)) {
+               mGlobalConfig.setKeyAccount(GlobalConfig.DEFAULT_ACCOUNT);
+           } else {
+               mGlobalConfig.setKeyAccount(accountName);
+           }
+        }
+
     }
 }

@@ -1,19 +1,29 @@
 <?php
-use app\models\Ask;
+use app\components\BaseController;
+use app\components\Y;
 use app\controllers\admin\AskController;
+use app\models\Ask;
+use app\models\DictSentenceTranslation;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\helpers\Url;
-use app\models\DictSentenceTranslation;
-use app\components\Y;
 
 /**
  * @var Ask $ask
  */
 ?>
-<hr />
+<div class="page-header">
+  <h1><?= Y::t('admin_edit_asks') ?></h1>
+</div>
+<div>
+<label><?= Y::t('label_question') ?>:</label><br/>
+<?= Y::t('how_to_say_in_language_the_following_sentence', [
+	    'fromLanguage' => $ask->getFromLanguageStr(BaseController::getUserLaguageId()),
+	    'toLanguage' => $ask->getToLanguageStr(BaseController::getUserLaguageId()),
+])?>
+</div>
 <div class="ask">
-    <?php $form = ActiveForm::begin([
+	<?php $form = ActiveForm::begin([
         'id' => 'edit-form',
         'action' => ['answer-ask', 'id' => $ask->id],
         'options' => ['class' => 'form-horizontal'],
@@ -22,12 +32,22 @@ use app\components\Y;
             'labelOptions' => ['class' => 'col-lg-1 control-label'],
         ],
     ]) ?>
-
         <?= Html::encode($ask->ask_content) ?><br>
-
-        <?= $form->field($fromDictSentenceTrans, '[0]translated_sentence')->textInput()->label(Y::t('From language')) ?><br>
+    
+    	<br/><label><?= Y::t('label_answer') ?>:</label><br/>
+        
+        <?= $form->field($fromDictSentenceTrans, '[0]translated_sentence')
+        			->textInput()
+        			->label(Y::t('from_language', [
+						'fromLanguage' => $ask
+						->getFromLanguageStr(BaseController::getUserLaguageId())])) 
+        ?>
         <?= Html::activeHiddenInput($fromDictSentenceTrans, '[0]dict_language_id') ?>
-        <?= $form->field($toDictSentenceTrans, '[1]translated_sentence')->textInput()->label(Y::t('To language')) ?><br>
+        <?= $form->field($toDictSentenceTrans, '[1]translated_sentence')
+        			->textInput()
+        			->label(Y::t('to_language', [
+						'toLanguage' => $ask
+						->getToLanguageStr(BaseController::getUserLaguageId())])) ?>
         <?= Html::activeHiddenInput($toDictSentenceTrans, '[1]dict_language_id') ?>
         <div class="form-group">
             <div class="col-lg-offset-1 col-lg-11">

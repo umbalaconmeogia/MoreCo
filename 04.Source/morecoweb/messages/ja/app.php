@@ -7,12 +7,19 @@
  */
 return array (
   'MoreCo' => 'モア子',
+  'admin_edit_asks' => '質問の編集',
+  'admin_list_asks' => '質問管理',
+  'admin_view_asks' => '質問の表示',
+  'from_language' => '{fromLanguage}から',
   'how_to_say_in_language_the_following_sentence' => '{toLanguage}では次の{fromLanguage}の分をどう言いますか？',
+  'label_answer' => '回答',
+  'label_question' => '質問',
   'list_all_asks' => '全質問一覧',
   'list_my_asks' => '自分の質問一覧',
   'not_replied' => '未回答',
   'post_question' => '質問投稿',
   'reply' => '回答',
   'submit' => '投稿',
+  'to_language' => '{toLanguage}へ',
 );
 ?>

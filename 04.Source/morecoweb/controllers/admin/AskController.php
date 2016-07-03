@@ -7,8 +7,9 @@ use Yii;
 use app\models\Ask;
 use app\models\DictSentenceTranslation;
 use app\models\DictSentence;
+use app\components\BaseController;
 
-class AskController extends Controller
+class AskController extends BaseController
 {
 	/**
 	 * List ask

@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use app\components\Y;
 
 /**
  * This is the model class for table "ask".
@@ -86,7 +87,23 @@ class Ask extends BaseBatsgModel
      * @return string
      */
     public function getFromLanguageStr($inLanguageId) {
-      return $this->getFromLanguage()->getDictLanguageNameStr($inLanguageId);
+      return $this->fromLanguage->getDictLanguageNameStr($inLanguageId);
+    }
+
+    /**
+     * @return DictLanguage
+     */
+    public function getToLanguage() {
+      return $this->hasOne(DictLanguage::className(), ['id' => 'to_language_id']);
+    }
+    
+    /**
+     * Get name of to language in specified language.
+     * @param int $inLanguageId Specified language.
+     * @return string
+     */
+    public function getToLanguageStr($inLanguageId) {
+      return $this->toLanguage->getDictLanguageNameStr($inLanguageId);
     }
     
     /**

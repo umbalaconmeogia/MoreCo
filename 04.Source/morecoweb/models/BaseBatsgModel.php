@@ -1,6 +1,9 @@
 <?php
 namespace app\models;
 
+use Yii;
+use app\components\HDateTime;
+
 /**
  * Model that has field $id, $data_status, $create_time, $create_user_id, $update_time, $update_user_id.
  */
@@ -15,33 +18,33 @@ class BaseBatsgModel extends BaseModel
    * attributes before performing validation.
    * @see CModel::beforeValidate()
    */
-//   protected function beforeValidate()
-//   {
-//     $currentUserId = isset(Yii::app()->user) ? Yii::app()->user->id : NULL;
-//     if ($this->isNewRecord) {
-//       // data_status will be set when import data from backup csv etc.
-//       if (!$this->data_status) {
-//         $this->data_status = self::DATA_STATUS_NEW;
-//       }
-//       if (!$this->create_user_id) {
-//         $this->create_user_id = $currentUserId;
-//       }
-//       // create_time will be set when import data from backup csv etc.
-//       if (!$this->create_time) {
-//         $this->create_time = HDateTime::now()->toString();
-//       }
-//     } else {
-//       // Only set data_status to "update" if this is not deleted.
-//       if ($this->data_status == self::DATA_STATUS_NEW) {
-//         $this->data_status = self::DATA_STATUS_UPDATE;
-//       }
-//       if (!$this->update_user_id) {
-//         $this->update_user_id = $currentUserId;
-//       }
-//       $this->update_time = HDateTime::now()->toString();
-//     }
-//     return parent::beforeValidate();
-//   }
+  public function beforeValidate()
+  {
+    $currentUserId = isset(Yii::$app->user) ? Yii::$app->user->id : NULL;
+    if ($this->isNewRecord) {
+      // data_status will be set when import data from backup csv etc.
+      if (!$this->data_status) {
+        $this->data_status = self::DATA_STATUS_NEW;
+      }
+      if (!$this->create_user_id) {
+        $this->create_user_id = $currentUserId;
+      }
+      // create_time will be set when import data from backup csv etc.
+      if (!$this->create_time) {
+        $this->create_time = HDateTime::now()->toString();
+      }
+    } else {
+      // Only set data_status to "update" if this is not deleted.
+      if ($this->data_status == self::DATA_STATUS_NEW) {
+        $this->data_status = self::DATA_STATUS_UPDATE;
+      }
+      if (!$this->update_user_id) {
+        $this->update_user_id = $currentUserId;
+      }
+      $this->update_time = HDateTime::now()->toString();
+    }
+    return parent::beforeValidate();
+  }
 
   /**
    * Perform massiveAssignment to a model.
@@ -91,10 +94,10 @@ class BaseBatsgModel extends BaseModel
    *   update_time
    *   update_user_id
    */
-//   public function resetCommonFields()
-//   {
-//     $this->setFieldToNull(array('id', 'data_status', 'create_time', 'create_user_id', 'update_time', 'update_user_id'));
-//   }
+  public function resetCommonFields()
+  {
+    $this->setFieldToNull(array('id', 'data_status', 'create_time', 'create_user_id', 'update_time', 'update_user_id'));
+  }
 
 //   public function saveLogError()
 //   {

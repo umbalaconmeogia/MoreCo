@@ -69,7 +69,7 @@ class DictLanguage extends BaseBatsgModel
      * @return string;
      */
     public function getDictLanguageNameStr($inLanguageId) {
-      $dictLanguageNames = DictLanguageName::hashModels($this->getDictLanguageNames(), 'in_language_id');
+      $dictLanguageNames = DictLanguageName::hashModels($this->dictLanguageNames, 'in_language_id');
       return isset($dictLanguageNames[$inLanguageId]) ? $dictLanguageNames[$inLanguageId]->name : $this->code;
     }
     

@@ -6,7 +6,6 @@ use Yii;
 
 class BaseModel extends \yii\db\ActiveRecord
 {
-
   /**
    * Get all errors on this model.
    * @param string $attribute attribute name. Use null to retrieve errors for all attributes.

@@ -67,13 +67,13 @@ class DictApiController extends Controller {
         'data_status' 
     ])->all();
     
-    // Limit return result. Just for test.
-    $maxDictSentenceNumber = Yii::$app->request->get('maxDictSentenceNumber');
-    if ($maxDictSentenceNumber) {
-      $dictSentences = array_slice($dictSentences, 0, $maxDictSentenceNumber);
-      $dictSentenceTranslations = array_slice(
-          $dictSentenceTranslations, 0, $maxDictSentenceNumber * count($dictLanguages));
-    }
+//     // Limit return result. Just for test.
+//     $maxDictSentenceNumber = Yii::$app->request->get('maxDictSentenceNumber');
+//     if ($maxDictSentenceNumber) {
+//       $dictSentences = array_slice($dictSentences, 0, $maxDictSentenceNumber);
+//       $dictSentenceTranslations = array_slice(
+//           $dictSentenceTranslations, 0, $maxDictSentenceNumber * count($dictLanguages));
+//     }
     
     // Set return result.
     $result = [ 

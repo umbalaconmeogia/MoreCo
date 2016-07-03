@@ -13,8 +13,10 @@ import android.support.v4.app.ListFragment;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -219,6 +221,39 @@ public class SearchFragment extends Fragment implements GoogleApiClient.Connecti
         View view = inflater.inflate(R.layout.layout_search_fragment, container, false);
 
         mSearchListView = (ListView) view.findViewById(R.id.search_list);
+        mSearchListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                String message = searchResults.get(i);
+                Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+
+                if (mGoogleApiClient.isConnected()) {
+                    new AsyncTask<String, Void, Void>() {
+                        @Override
+                        protected Void doInBackground(String... params) {
+                            sendMessageToStartActivity(params[0]);
+                            return null;
+                        }
+                    }.execute(message);
+                }
+                //     speakOut();
+//                Asset asset = null;
+//                try {
+//                    asset = Asset.createFromBytes("Android端末からのデータ".getBytes());
+//                } catch (Exception e){
+//
+//                }
+//
+//                final PutDataRequest req = PutDataRequest.create(DATA_API_PATH);
+//                req.putAsset(DATA_API_EXTRA_KEY,asset);
+//                NodeApi.GetConnectedNodesResult nodes = Wearable.NodeApi.getConnectedNodes(mGoogleApiClient).await();
+//                for (Node node : nodes.getNodes()) {
+//                    DataApi.DataItemResult result = Wearable.DataApi.putDataItem(mGoogleApiClient,req).await();
+//
+//                }
+                speakOut(message);
+            }
+        });
 
         int SDK_INT = android.os.Build.VERSION.SDK_INT;
         if (SDK_INT > 9)
@@ -243,52 +278,10 @@ public class SearchFragment extends Fragment implements GoogleApiClient.Connecti
         ((Button) view.findViewById(R.id.sendbtn)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String searchText = "私は部屋の鍵でルームに";
-                List<SearchDataRecord> searchData = createDataJapanese();
-                List<SearchDataRecord> searchResult = SearchLib.search(searchText, SearchLib.LANG_CODE_JAPANESE, searchData, 0);
-                searchResults = new ArrayList<String>();
-
-                for (int i = 0; i < searchResult.size(); i++) {
-                    String sentence = searchResult.get(i).getSearchData();
-
-                    searchResults.add(sentence);
-                    if (BuildConfig.DEBUG) Log.d("SearchFragment", "sentence " + i + " : " + sentence);
-                }
-                ArrayAdapter adapter = new ArrayAdapter<String>(getActivity(), R.layout.search_list_layout, searchResults);
-
-//                mSearchListAdapter = new SearchListAdapter(getActivity(), searchResults);
-                mSearchListView.setAdapter(adapter);
-
                 new Translator().execute();
 //                String message = "";
 //                if (mEditText.getText() != null) {
 //                    message = mEditText.getText().toString();
-//                }
-
-
-                if (mGoogleApiClient.isConnected()) {
-                    new AsyncTask<String, Void, Void>() {
-                        @Override
-                        protected Void doInBackground(String... params) {
-                            sendMessageToStartActivity(params[0]);
-                            return null;
-                        }
-                    }.execute(mGoogleTranslateResult);
-                }
-                speakOut();
-//                Asset asset = null;
-//                try {
-//                    asset = Asset.createFromBytes("Android端末からのデータ".getBytes());
-//                } catch (Exception e){
-//
-//                }
-//
-//                final PutDataRequest req = PutDataRequest.create(DATA_API_PATH);
-//                req.putAsset(DATA_API_EXTRA_KEY,asset);
-//                NodeApi.GetConnectedNodesResult nodes = Wearable.NodeApi.getConnectedNodes(mGoogleApiClient).await();
-//                for (Node node : nodes.getNodes()) {
-//                    DataApi.DataItemResult result = Wearable.DataApi.putDataItem(mGoogleApiClient,req).await();
-//
 //                }
             }
         });
@@ -309,7 +302,7 @@ public class SearchFragment extends Fragment implements GoogleApiClient.Connecti
                     || result == TextToSpeech.LANG_NOT_SUPPORTED) {
                 Toast.makeText(getActivity(), "This Language is not supported", Toast.LENGTH_SHORT).show();
             } else {
-                speakOut();
+//                speakOut();
             }
 
         } else {
@@ -318,10 +311,10 @@ public class SearchFragment extends Fragment implements GoogleApiClient.Connecti
 
     }
 
-    private void speakOut() {
-        String text = mEditText.getText().toString();
-        if (!TextUtils.isEmpty(text))
-            mTextToSpeech.speak(mGoogleTranslateResult, TextToSpeech.QUEUE_FLUSH, null);
+    private void speakOut(String message) {
+//        String text = mEditText.getText().toString();
+        if (!TextUtils.isEmpty(message))
+            mTextToSpeech.speak(message, TextToSpeech.QUEUE_FLUSH, null);
     }
 
 
@@ -383,6 +376,32 @@ public class SearchFragment extends Fragment implements GoogleApiClient.Connecti
         mGoogleTranslateResult = mTranslator.translate(translatelog, "en", "ja");
 //        Toast.makeText(getActivity(), translatelog, Toast.LENGTH_LONG).show();
         Toast.makeText(getActivity(), mGoogleTranslateResult , Toast.LENGTH_LONG).show();
+//        String searchText = "私は部屋の鍵でルームに";
+        String searchText = mEditText.getText().toString();
+        RealmResults<DictSentenceTranslationDataModel> models = mMoreCoRealmDB.queryAllRealmDB();
+        
+
+        for (int i = 0; i < models.size(); i++){
+            Toast.makeText(getActivity(), "Nguy hiem qua :" + models.get(i).getData_status() , Toast.LENGTH_SHORT).show();
+            if (BuildConfig.DEBUG) Log.d("SearchFragment", "sentence : " + models.get(i).getTranslated_sentence());
+        }
+        List<SearchDataRecord> searchData = createDataTestJapanese();
+        List<SearchDataRecord> searchResult = SearchLib.search(searchText, SearchLib.LANG_CODE_JAPANESE, searchData, 0);
+        searchResults = new ArrayList<String>();
+
+        if (!TextUtils.isEmpty(mGoogleTranslateResult)) {
+            searchResults.add(searchText);
+        }
+        for (int i = 0; i < searchResult.size(); i++) {
+            String sentence = searchResult.get(i).getSearchData();
+            searchResults.add(sentence);
+            if (BuildConfig.DEBUG) Log.d("SearchFragment", "sentence " + i + " : " + sentence);
+        }
+
+        ArrayAdapter adapter = new ArrayAdapter<String>(getActivity(), R.layout.search_list_layout, searchResults);
+
+//                mSearchListAdapter = new SearchListAdapter(getActivity(), searchResults);
+        mSearchListView.setAdapter(adapter);
     }
 
 //    public void searchtext() {
@@ -394,54 +413,54 @@ public class SearchFragment extends Fragment implements GoogleApiClient.Connecti
 //        }
 //    }
 
-    private List<SearchDataRecord> createDataJapanese() {
-        List<String> list = new ArrayList<>();
-        RealmResults<DictSentenceTranslationDataModel> dictsen = mMoreCoRealmDB.queryAllRealmDB();
-        for(DictSentenceTranslationDataModel model: dictsen){
-            String sentence = model.getTranslated_sentence();
-            list.add(sentence);
-        }
-
-        return createDataTest(list);
-    }
+//    private List<SearchDataRecord> createDataJapanese() {
+//        List<String> list = new ArrayList<>();
+//        RealmResults<DictSentenceTranslationDataModel> dictsen = mMoreCoRealmDB.queryAllRealmDB();
+//        for(DictSentenceTranslationDataModel model: dictsen){
+//            String sentence = model.getTranslated_sentence();
+//            list.add(sentence);
+//        }
+//
+//        return createDataTest(list);
+//    }
 
 //    private static  List<SearchDataRecord> createDataEnglish() {
 //    }
 
-//    private static List<SearchDataRecord> createDataTestJapanese() {
-//        String[] testData = {
-//                "チェックインをお願いします。名前は{0}です。",
-//                "これが予約確認書です。",
-//                "予約してません。空いている部屋はありますか？",
-//                "シングル１部屋で、２泊です。",
-//                "ダブルルーム１部屋で１泊です。",
-//                "ツインルーム１部屋で３泊です。",
-//                "バスルーム/シャワーつきの部屋ですか？",
-//                "ご予約頂いている{0}様ですね。",
-//                "空いている部屋はございます。どうぞ、お泊まり下さい。",
-//                "あいにく、空いている部屋はございません。",
-//                "こちらのフォームにご記入下さい。",
-//                "お支払はクレジットカードですか？",
-//                "では、クレジットカードをお願い致します。",
-//                "有難うございました。（カードを返す。）",
-//                "料金は前払いとなっております。{0}ドルをお願い致します。",
-//                "有難うございました。こちらが領収書です。",
-//                "お部屋の番号は{0}になります。こちらが鍵です。",
-//                "お部屋は２階です。",
-//                "お部屋は３階です。",
-//                "今、係りの者がお部屋までご案内いたします。",
-//                "外出の際は、鍵をフロントにお預け下さい。",
-//                "朝食はカフェテリアでお取り頂けます。",
-//                "朝食は料金に含まれています。",
-//                "カフェテリアは１階、あちらにございます。 (方向を手で示しながら。）",
-//        };
-//        return createDataTest(testData);
-//    }
+    private static List<SearchDataRecord> createDataTestJapanese() {
+        String[] testData = {
+                "チェックインをお願いします。名前は{0}です。",
+                "これが予約確認書です。",
+                "予約してません。空いている部屋はありますか？",
+                "シングル１部屋で、２泊です。",
+                "ダブルルーム１部屋で１泊です。",
+                "ツインルーム１部屋で３泊です。",
+                "バスルーム/シャワーつきの部屋ですか？",
+                "ご予約頂いている{0}様ですね。",
+                "空いている部屋はございます。どうぞ、お泊まり下さい。",
+                "あいにく、空いている部屋はございません。",
+                "こちらのフォームにご記入下さい。",
+                "お支払はクレジットカードですか？",
+                "では、クレジットカードをお願い致します。",
+                "有難うございました。（カードを返す。）",
+                "料金は前払いとなっております。{0}ドルをお願い致します。",
+                "有難うございました。こちらが領収書です。",
+                "お部屋の番号は{0}になります。こちらが鍵です。",
+                "お部屋は２階です。",
+                "お部屋は３階です。",
+                "今、係りの者がお部屋までご案内いたします。",
+                "外出の際は、鍵をフロントにお預け下さい。",
+                "朝食はカフェテリアでお取り頂けます。",
+                "朝食は料金に含まれています。",
+                "カフェテリアは１階、あちらにございます。 (方向を手で示しながら。）",
+        };
+        return createDataTest(testData);
+    }
 
-    private static List<SearchDataRecord> createDataTest(List<String> testData) {
+    private static List<SearchDataRecord> createDataTest(String[] testData) {
         List<SearchDataRecord> result = new ArrayList<SearchDataRecord>();
-        for (int i = 0; i < testData.size(); i++) {
-            result.add(new TestSearchData(testData.get(i)));
+        for (int i = 0; i < testData.length; i++) {
+            result.add(new TestSearchData(testData[i]));
         }
 
         return result;

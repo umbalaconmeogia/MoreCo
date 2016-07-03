@@ -1,14 +1,15 @@
 # MoreCo（モア子）＠SBCloud Hackathon 2016
 
-## ソースプログラムのフォルダ
+# ソースプログラムのフォルダ
 https://github.com/umbalaconmeogia/MoreCo/tree/master/04.Source
+
 プログラム構成
 
 * Android スマホアプリ: https://github.com/umbalaconmeogia/MoreCo/tree/master/04.Source/morecoandroid
 * Android Wearアプリ: Android スマホアプリと同フォルダ
 * ウェブシステム: https://github.com/umbalaconmeogia/MoreCo/tree/master/04.Source/morecoweb
 
-## システム・アプリのインストール／ビルド／テスト方法
+# システム・アプリのインストール／ビルド／テスト方法
 
 ### Androidアプリのビルド／インストール
 * 開発環境の必要な条件: Android Studio ver2.0 がおすすめです.  
@@ -110,7 +111,7 @@ $ sh AskDummyData.bat
 
 * Androidアプリからクエスチョンマーク（？）アイコンを押下して開く。
 
-## 利用するオープンソースライブラリ一覧
+# 利用するオープンソースライブラリ一覧
 
 |ライブラリ名|用途|配置場所若しくは依存性管理ファイル|URL|
 |---|---|---|---|

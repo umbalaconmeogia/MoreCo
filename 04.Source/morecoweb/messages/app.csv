@@ -5,6 +5,9 @@ to_language,To {toLanguage},{toLanguage}へ
 admin_list_asks,Questions management,質問管理
 admin_edit_asks,Edit Question,質問の編集
 admin_view_asks,View Question,質問の表示
+answer_status_not_answered,Not Answered,未回答
+answer_status_answered,Answered,回答済み
+answer_status_closed,Closed,クローズ
 label_answer,Answer,回答
 label_question,Question,質問
 list_all_asks,List all questions,全質問一覧

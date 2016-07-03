@@ -24,7 +24,16 @@ public class AskFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        String localLang = Locale.getDefault().getDisplayLanguage();
+//        String localLang = getResources().getConfiguration().locale.getLanguage();
+        String langCode = "ja";
+        Locale locale = Locale.getDefault();
+        if (locale.equals(Locale.JAPAN)) {
+            langCode = "ja";
+        } else if (locale.equals(Locale.US)){
+            langCode = "en";
+        } else {
+            langCode = "vi";
+        }
         String account   = new GlobalConfig(getActivity()).getKeyAccount();
 
         View rootView = inflater.inflate(R.layout.layout_ask_fragment, container, false);
@@ -41,7 +50,7 @@ public class AskFragment extends Fragment {
 
         StringBuilder builder = new StringBuilder();
         builder.append(Constant.WEBVIEW_URL);
-        builder.append("userLoginEmail=" + localLang);
+        builder.append("userLoginEmail=" + langCode);
         builder.append("&userLanguageCode=" + account);
         webView.loadUrl(builder.toString());
 

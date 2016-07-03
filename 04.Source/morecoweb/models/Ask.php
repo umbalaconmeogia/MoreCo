@@ -121,9 +121,9 @@ class Ask extends BaseBatsgModel
      */
     public function getAnswerStatusStr() {
     	$statusStrs = [
-    	self::ANSWER_STATUS_NOT_ANSWERED => Y::t('Not answered'),
-    	self::ANSWER_STATUS_ANSWERED => Y::t('Answered'),
-    	self::ANSWER_STATUS_CLOSED => Y::t('Closed'),
+    	self::ANSWER_STATUS_NOT_ANSWERED => Y::t('answer_status_not_answered'),
+    	self::ANSWER_STATUS_ANSWERED => Y::t('answer_status_answered'),
+    	self::ANSWER_STATUS_CLOSED => Y::t('answer_status_closed'),
     	];
     	return isset($statusStrs[$this->answer_status]) ? $statusStrs[$this->answer_status] : Y::t('Unknown');
     }

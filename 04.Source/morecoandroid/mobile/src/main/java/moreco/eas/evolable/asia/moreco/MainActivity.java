@@ -256,6 +256,7 @@ public class MainActivity extends AppCompatActivity {
         protected void onPostExecute(Void result) {
             progress.dismiss();
             super.onPostExecute(result);
+            /**
             JsonObject jsonObject = mDictDataUtils.requestDictionaryJsonObject(DictionaryDataUtils.REQUEST_DICTIONARY_DATA_URL);
             String version = jsonObject.getAsJsonObject("DictVersion").get("version").getAsString();
             int versionId = jsonObject.getAsJsonObject("DictVersion").get("id").getAsInt();
@@ -303,6 +304,7 @@ public class MainActivity extends AppCompatActivity {
                 int senttranstatus = dictsentenceTranslation.getAsJsonObject().get("data_status").getAsInt();
                 mMoreCoRealmDB.writetoDictSentenceTranslationDB(sentransid, dict_language_id, dict_sentence_id, translated_sentence, search_tex, senttranstatus);
             }
+             **/
         }
 
         @Override

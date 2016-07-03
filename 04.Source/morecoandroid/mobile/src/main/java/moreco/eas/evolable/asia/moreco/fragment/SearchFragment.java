@@ -259,6 +259,7 @@ public class SearchFragment extends Fragment implements GoogleApiClient.Connecti
             @Override
             public void onClick(View view) {
                 new Translator().execute();
+                hideSoftKeyBoard(getActivity());
             }
         });
 
@@ -304,8 +305,6 @@ public class SearchFragment extends Fragment implements GoogleApiClient.Connecti
                 }
             }
         });
-
-
         return view;
 
     }

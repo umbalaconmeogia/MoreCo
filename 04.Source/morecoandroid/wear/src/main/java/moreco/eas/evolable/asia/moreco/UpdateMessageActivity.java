@@ -32,7 +32,7 @@ public class UpdateMessageActivity extends WearMainActivity {
         super.onResume();
         Bundle bundle = getIntent().getExtras();
         mTextView.setText(bundle.getString(WearService.EXTRA_KEY_MESSAGE));
-        mTextView.setTextSize(30L);
+        mTextView.setTextSize(60L);
     }
 
     @Override

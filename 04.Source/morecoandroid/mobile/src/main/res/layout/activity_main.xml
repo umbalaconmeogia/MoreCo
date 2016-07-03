@@ -35,7 +35,7 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1">
+                android:layout_weight="6">
 
                 <TextView
                     android:id="@+id/title"
@@ -55,7 +55,8 @@
 
                 <ImageButton
                     android:layout_width="wrap_content"
-                    android:layout_height="40dip"
+                    android:layout_marginTop="5dip"
+                    android:layout_height="30dip"
                     android:id="@+id/lang1"
                     android:src="@drawable/english"
                     android:layout_centerHorizontal="true"
@@ -65,15 +66,18 @@
                     android:scaleType="fitXY" />
 
                 <TextView
-                    android:layout_width="40dip"
+                    android:layout_marginTop="5dip"
+                    android:layout_width="30dip"
+                    android:id="@+id/textbar"
                     android:layout_height="wrap_content"
                     android:text="  -  "
-                    android:textSize="20sp"
+                    android:textSize="30sp"
                     android:textColor="@android:color/white"/>
 
                 <ImageButton
                     android:layout_width="wrap_content"
-                    android:layout_height="40dip"
+                    android:layout_marginTop="5dip"
+                    android:layout_height="30dip"
                     android:id="@+id/lang2"
                     android:src="@drawable/japan"
                     android:layout_centerHorizontal="true"

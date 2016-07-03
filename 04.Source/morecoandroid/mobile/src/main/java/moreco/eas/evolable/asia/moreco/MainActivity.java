@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView mTitleView;
     private ImageView mLang1Btn;
     private ImageView mLang2Btn;
+    private TextView mTextbar;
 
     private int[] tabIcons = {
             R.drawable.find,
@@ -68,6 +69,8 @@ public class MainActivity extends AppCompatActivity {
         mTitleView = (TextView) findViewById(R.id.title);
         mLang1Btn = (ImageView) findViewById(R.id.lang1);
         mLang2Btn = (ImageView) findViewById(R.id.lang2);
+        mTextbar = (TextView) findViewById(R.id.textbar);
+
 
         mViewPager = (ViewPager) findViewById(R.id.viewpager);
         mViewPager.setOffscreenPageLimit(4);
@@ -87,10 +90,12 @@ public class MainActivity extends AppCompatActivity {
                     mTitleView.setText("Search");
                     mLang1Btn.setVisibility(View.VISIBLE);
                     mLang2Btn.setVisibility(View.VISIBLE);
+                    mTextbar.setVisibility(View.VISIBLE);
                 } else if(position == 1){
                     mTitleView.setText("Ask");
                     mLang1Btn.setVisibility(View.GONE);
                     mLang2Btn.setVisibility(View.GONE);
+                    mTextbar.setVisibility(View.GONE);
                 }
 
             }
@@ -134,14 +139,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-    }
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
     }
 
     /**

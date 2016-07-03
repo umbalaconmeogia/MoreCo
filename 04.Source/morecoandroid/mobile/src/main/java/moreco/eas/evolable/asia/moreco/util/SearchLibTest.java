@@ -1081,8 +1081,8 @@ public class SearchLibTest {
         public String textJa;
 
         public TestSearchData(String textEn, String textJa) {
-            this.textEn = textEn;
-            this.textJa = textJa;
+            this.textEn = textEn.toLowerCase();
+            this.textJa = textJa.toLowerCase();
         }
 
         @Override

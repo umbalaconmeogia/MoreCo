@@ -1,6 +1,7 @@
 package moreco.eas.evolable.asia.moreco.fragment;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -264,18 +266,23 @@ public class SearchFragment extends Fragment implements GoogleApiClient.Connecti
             @Override
             public void onClick(View view) {
                 String searchText = mEditText.getText().toString();
-                List<SearchDataRecord> searchData = SearchLibTest.createDataTest();
-                SearchLibTest.TestSearchData.searchingLanguage = SearchLib.LANG_CODE_ENGLISH;
-                mSearchResult = SearchLib.search(searchText, SearchLib.LANG_CODE_ENGLISH, searchData, 0);
-                searchResults = new ArrayList<String>();
-                for (int i = 0; i < mSearchResult.size(); i++) {
-                    String sentence = mSearchResult.get(i).getSearchData();
-                    searchResults.add(sentence);
-                    if (BuildConfig.DEBUG) Log.d("SearchFragment", "sentence " + i + " : " + sentence);
-                }
+                if(!TextUtils.isEmpty(searchText)) {
+                    searchText = searchText.toLowerCase();
+                    List<SearchDataRecord> searchData = SearchLibTest.createDataTest();
+                    SearchLibTest.TestSearchData.searchingLanguage = SearchLib.LANG_CODE_ENGLISH;
+                    mSearchResult = SearchLib.search(searchText, SearchLib.LANG_CODE_ENGLISH, searchData, 0);
+                    searchResults = new ArrayList<String>();
+                    for (int i = 0; i < mSearchResult.size(); i++) {
+                        String sentence = mSearchResult.get(i).getSearchData();
+                        searchResults.add(sentence);
+                        if (BuildConfig.DEBUG)
+                            Log.d("SearchFragment", "sentence " + i + " : " + sentence);
+                    }
 
-                ArrayAdapter adapter = new ArrayAdapter<String>(getActivity(), R.layout.search_list_layout, searchResults);
-                mSearchListView.setAdapter(adapter);
+                    ArrayAdapter adapter = new ArrayAdapter<String>(getActivity(), R.layout.search_list_layout, searchResults);
+                    mSearchListView.setAdapter(adapter);
+                    hideSoftKeyBoard(getActivity());
+                }
             }
         });
 
@@ -398,6 +405,10 @@ public class SearchFragment extends Fragment implements GoogleApiClient.Connecti
             }.execute(mGoogleTranslateResult);
         }
         speakOut(mGoogleTranslateResult);
+    }
 
+    private void hideSoftKeyBoard(Context context){
+        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
     }
 }

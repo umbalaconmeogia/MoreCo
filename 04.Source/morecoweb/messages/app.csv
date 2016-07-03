@@ -1,5 +1,12 @@
 message,en,ja
 how_to_say_in_language_the_following_sentence,How to say in {toLanguage} the following {fromLanguage} sentence?,{toLanguage}では次の{fromLanguage}の分をどう言いますか？
+from_language,From {fromLanguage},{fromLanguage}から
+to_language,To {toLanguage},{toLanguage}へ
+admin_list_asks,Questions management,質問管理
+admin_edit_asks,Edit Question,質問の編集
+admin_view_asks,View Question,質問の表示
+label_answer,Answer,回答
+label_question,Question,質問
 list_all_asks,List all questions,全質問一覧
 list_my_asks,List my questions,自分の質問一覧
 MoreCo,MoreCo,モア子

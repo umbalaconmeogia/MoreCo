@@ -109,14 +109,15 @@ class Ask extends BaseBatsgModel
     /**
      * getToLanguageNames
      */
-    public function getToLanguageNames()
-    {
-    	return $this->hasMany(DictLanguageName::className(), ['to_language_id' => 'id']);
-    }
+//     public function getToLanguageNames()
+//     {
+//     	return $this->hasMany(DictLanguageName::className(), ['to_language_id' => 'id']);
+//     }
     
     /**
+     * getAnswerStatusStr
      * 
-     * @return NULL
+     * @return $statusStrs
      */
     public function getAnswerStatusStr() {
     	$statusStrs = [

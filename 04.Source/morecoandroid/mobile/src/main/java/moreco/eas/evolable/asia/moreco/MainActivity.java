@@ -33,6 +33,7 @@ import moreco.eas.evolable.asia.moreco.fragment.SearchFragment;
 import moreco.eas.evolable.asia.moreco.preferences.GlobalConfig;
 import moreco.eas.evolable.asia.moreco.service.LoadDictDataService;
 import moreco.eas.evolable.asia.moreco.util.DictionaryDataUtils;
+import moreco.eas.evolable.asia.moreco.util.NetworkUtils;
 
 public class MainActivity extends AppCompatActivity {
     public static final int REQUEST_CODE =3;
@@ -112,12 +113,16 @@ public class MainActivity extends AppCompatActivity {
         mGlobalConfig = new GlobalConfig(MainActivity.this);
         mMoreCoRealmDB = new MoreCoRealmDB(MainActivity.this);
 
-        new LoadDictVesion().execute();
+        if (NetworkUtils.isOnline(this)) {
+            new LoadDictVesion().execute();
 
-        if (mGlobalConfig.getKeyMusttoUpdateDictData()) {
-            new LoadDictData().execute();
+            if (mGlobalConfig.getKeyMusttoUpdateDictData()) {
+                new LoadDictData().execute();
 //          Intent intent = new Intent(MainActivity.this, LoadDictDataService.class);
 //          startService(intent);
+            }
+        } else {
+            Toast.makeText(this, "Connect your device to the internet to run Google Translate function.", Toast.LENGTH_SHORT).show();
         }
 
         mLang1Btn.setOnClickListener(new View.OnClickListener() {
